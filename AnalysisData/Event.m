@@ -5,8 +5,8 @@
 
 classdef Event
     properties (Access = private)
-        Info = [];
-        Time = [];
+        info = [];
+        time = [];
     end
 
     methods (Access = public)

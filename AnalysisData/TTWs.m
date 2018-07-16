@@ -2,12 +2,12 @@
 
 classdef TTW
     properties (Access = private)
-        RealFixationTTW
-        RealCueTTW
-        RealNothingTTW
-        RealStimulusTTW
-        RealReleaseWaitTTW
-        RealChangeStimulusTTW
-        RealRewardTTW
+        realfixationTTW
+        realcueTTW
+        realnothingTTW
+        realstimulusTTW
+        realreleaseWaitTTW
+        realchangeStimulusTTW
+        realrewardTTW
     end
 end

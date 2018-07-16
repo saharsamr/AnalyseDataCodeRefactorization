@@ -5,9 +5,9 @@ classdef Experiment
         ExperimentSubject = ''
         ExperimentResearcherFirstName = ''
         ExperimentResearcherLastName = ''
-        StartDate
+        startDate
         Properties
-        Trials
+        trials
     end
 
     methods (Access = public)

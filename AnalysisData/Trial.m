@@ -1,23 +1,24 @@
 classdef Trial
     properties (Access = private)
         ID
-        Events
-        TrialNumber
-        StartTime
-        EndTime
-        Bar
-        Changed
-        States
+        events
+        trialNumber
+        startTime
+        endTime
+        bar
+        changed
+        states
         Error
-        RewardValue
-        IsGood2 % TODO: Ask to find a better name
-        IsGood1
-        ClueIndex
-        ChangeIndex
-        ShouldKeep
-        Eye
-        ReactionTime
+        rewardValue
+        isGood2 % TODO: Ask to find a better name
+        isGood1
+        clueIndex
+        changeIndex
+        shouldKeep
+        goodAmount
+        eye
+        reactionTime
         TTW
-        StateTiming
+        stateTiming
     end
 end

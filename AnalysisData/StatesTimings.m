@@ -1,11 +1,11 @@
 classdef StatesTimings
     properties (Access = private)
-        Fixation
-        Cue
-        Stimulus
-        KeepTrigger
-        ReleaseTrigger
-        Trigger
-        ChangedStimulus
+        fixation
+        cue
+        stimulus
+        keepTrigger
+        releaseTrigger
+        trigger
+        changedStimulus
     end
 end
