@@ -1,6 +1,6 @@
 classdef Bar < Event
     properties (Access = private)
-        signal
+        Signal
     end
 
     methods (Access = public)

@@ -5,14 +5,14 @@
 
 classdef Event
     properties (Access = private)
-        info = [];
-        time = [];
+        Info = [];
+        Time = [];
     end
 
     methods (Access = public)
         function this = Event (info, time)
-            this.info = info;
-            this.time = time;
+            this.Info = info;
+            this.Time = time;
         end
     end
 end

@@ -11,7 +11,6 @@ classdef Experiment
     end
 
     methods (Access = public)
-
         function this = Experiment (
                 postfix,
                 exType,
