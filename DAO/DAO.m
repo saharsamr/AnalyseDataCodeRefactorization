@@ -1,4 +1,5 @@
 classdef DAO
+
     properties (Access = private)
         subject_name
         task_name
@@ -58,7 +59,6 @@ classdef DAO
                                         this.researcher_lastname, ...
                                         time_data ...
                             );
-
             end
         end
     end
