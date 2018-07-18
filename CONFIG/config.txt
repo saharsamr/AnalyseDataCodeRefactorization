@@ -1,9 +1,0 @@
-SubjectName : 'Chiko'
-TaskName : 'Attention'
-ResearcherFirstname : 'Jafar'
-ResearcherLastname : ''
-TimeStart : '2018-07-15 08:00:00'
-TimeEnd   : '2018-07-15 18:30:00'
-bar_sampling_frequency : 2000
-closeFigFlag : 0
-data_path : 'C:\Users\Sahar\Desktop\Refactored Codes\Data\EDF Data'
