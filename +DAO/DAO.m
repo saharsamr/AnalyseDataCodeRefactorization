@@ -35,7 +35,7 @@ classdef DAO
             this.bar_sampling_frequency = bar_sampling_frequency;
             this.close_fig_flag = close_fig_flag;
             this.data_folder = data_folder_pass;
-            this.data_list = dir(fullfile(this.data_folder, '*.edf'))
+            this.data_list = dir(fullfile(this.data_folder, '*.edf'));
             this.time_data = datetime(this.data_list(1).name(1:20), 'InputFormat', 'dd-MMM-yyyy-HH-mm-SS');
         end
 
@@ -46,7 +46,7 @@ classdef DAO
                 try
                     this.validate_time_data()
                     data_eye = this.load_data(exp_index)
-                    experiment = Experiment( ...
+                    experiment = AnalysisData.Experiment( ...
                                             postfix, ...
                                             this.task_name, ...
                                             this.subject_name, ...
@@ -56,7 +56,7 @@ classdef DAO
                                 );
                     experiment.set_data_eye(data_eye);
                 catch e
-                    disp(e.message);
+                    % disp(e.message);
                     continue
                 end
             end
@@ -75,11 +75,10 @@ classdef DAO
         end
 
         function data_eye = load_data (this, exp_index)
-            import AnalysisData.*
             addpath('edfReader')
             path = [this.data_folder this.data_list(exp_index).name(1:end-4)];
             data_eye = AnalysisData.Experiment_Data(Edf2Mat([path '.edf']));
-            load([path '.mat']);
+            load([path '.mat']); % TODO: does not save any .mat files.
             disp('done');
         end
     end
