@@ -8,6 +8,6 @@ classdef Config
         TIME_END = '2018-07-15 18:30:00'
         BAR_SAMPLING_FREQ = 2000
         CLOSE_FIG_FLAG = 0
-        DATA_PATH = 'C:\Users\Sahar\Desktop\Refactored Codes\Data\EDF Data'
+        DATA_PATH = 'C:\Users\Sahar\Desktop\RefactoredCodes\Data\EDFData'
     end
 end

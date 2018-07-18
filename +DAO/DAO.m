@@ -12,7 +12,6 @@ classdef DAO
         time_start
         time_end
         time_data
-        data_eye % TODO: ask wether it just keep eye data!
     end
 
     methods (Access = public)
@@ -36,14 +35,14 @@ classdef DAO
             this.bar_sampling_frequency = bar_sampling_frequency;
             this.close_fig_flag = close_fig_flag;
             this.data_folder = data_folder_pass;
-            this.data_list = dir([this.data_folder '*.edf'])
+            this.data_list = dir(fullfile(this.data_folder, '*.edf'))
             this.time_data = datetime(this.data_list(1).name(1:20), 'InputFormat', 'dd-MMM-yyyy-HH-mm-SS');
         end
 
         function extract_experiments_data (this)
             for exp_index = 1:numel(this.data_list)
-                time_data = datetime(data_list(exp_index).name(1:20), 'InputFormat', 'dd-MMM-yyyy-HH-mm-SS');
-                postfix = data_list(exp_index).name(22:end-4);
+                this.time_data = datetime(this.data_list(exp_index).name(1:20), 'InputFormat', 'dd-MMM-yyyy-HH-mm-SS');
+                postfix = this.data_list(exp_index).name(22:end-4);
                 try
                     this.validate_time_data()
                     data_eye = this.load_data(exp_index)
@@ -53,7 +52,7 @@ classdef DAO
                                             this.subject_name, ...
                                             this.researcher_firstname, ...
                                             this.researcher_lastname, ...
-                                            time_data ...
+                                            this.time_data ...
                                 );
                     experiment.set_data_eye(data_eye);
                 catch e
