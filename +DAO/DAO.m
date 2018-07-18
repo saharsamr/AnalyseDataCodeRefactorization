@@ -56,7 +56,7 @@ classdef DAO
                                 );
                     experiment.set_data_eye(data_eye);
                 catch e
-                    fprintf(1, e.message)
+                    disp(e.message);
                     continue
                 end
             end
@@ -75,9 +75,12 @@ classdef DAO
         end
 
         function data_eye = load_data (this, exp_index)
+            import AnalysisData.*
+            addpath('edfReader')
             path = [this.data_folder this.data_list(exp_index).name(1:end-4)];
-            data_eye = Experiment_Data(Edf2Mat([path '.edf']));
+            data_eye = AnalysisData.Experiment_Data(Edf2Mat([path '.edf']));
             load([path '.mat']);
+            disp('done');
         end
     end
 
