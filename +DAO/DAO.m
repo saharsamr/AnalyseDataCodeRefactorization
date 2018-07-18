@@ -36,7 +36,7 @@ classdef DAO
             this.bar_sampling_frequency = bar_sampling_frequency;
             this.close_fig_flag = close_fig_flag;
             this.data_folder = data_folder_pass;
-            this.data_list = dir([this.data_folder '*.edf']);
+            this.data_list = dir([this.data_folder '*.edf'])
             this.time_data = datetime(this.data_list(1).name(1:20), 'InputFormat', 'dd-MMM-yyyy-HH-mm-SS');
         end
 
