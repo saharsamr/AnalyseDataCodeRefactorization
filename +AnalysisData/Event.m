@@ -3,8 +3,8 @@
 %       Some Repeatable data, such as Stetes, Bar, Event itsef, are using this class.
 %============================================
 
-classdef Event
-    properties (Access = private)
+classdef Event < handle
+    properties (Access = public)
         info = [];
         time = [];
     end
