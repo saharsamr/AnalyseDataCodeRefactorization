@@ -8,7 +8,7 @@ classdef Experiment_Data < handle
             this.data = data;
         end
 
-        function set_data_eye (data)
+        function set_data_eye (this, data)
             this.data = data;
         end
     end

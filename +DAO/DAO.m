@@ -52,11 +52,12 @@ classdef DAO
                                             this.subject_name, ...
                                             this.researcher_firstname, ...
                                             this.researcher_lastname, ...
-                                            this.time_data ...
+                                            this.time_data, ...
+                                            data_eye ...
                                 );
-                    experiment.set_data_eye(data_eye);
+                    % disp('Text');
                 catch e
-                    % disp(e.message);
+                    disp(e.message);
                     continue
                 end
             end
@@ -78,8 +79,8 @@ classdef DAO
             addpath('edfReader')
             path = [this.data_folder this.data_list(exp_index).name(1:end-4)];
             data_eye = AnalysisData.Experiment_Data(Edf2Mat([path '.edf']));
-            load([path '.mat']); % TODO: does not save any .mat files.
-            disp('done');
+            % load([path '.mat']); % TODO: does not save any .mat files.
+            % disp('done');
         end
     end
 
