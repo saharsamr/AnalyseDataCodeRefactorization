@@ -56,6 +56,7 @@ classdef DAO
                                             data_eye ...
                                 );
                     % disp('Text');
+                    experiment.extract_experiment_data();
                 catch e
                     disp(e.message);
                     continue

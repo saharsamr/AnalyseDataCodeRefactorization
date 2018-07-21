@@ -7,8 +7,11 @@ classdef Experiment
         ExperimentResearcherLastName = ''
         startDate
         Properties
-        trials
+        trials = []
         data_eye
+        events
+        start_time_eyelink % TODO: some features like this, does not need to store in the final structure.
+        eye_time_samples % TODO: same TODO above.
     end
 
     methods (Access = public)
@@ -26,8 +29,35 @@ classdef Experiment
             this.ExperimentSubject =  exSubject;
             this.ExperimentResearcherFirstName = exResearcherFN;
             this.ExperimentResearcherLastName = exResearcherLN;
-            this.startDate = startDate;
+            this.startDate = startDate; %TODO: heck that this parameter is set correctly.
             this.data_eye = data_eye
+        end
+
+        function extract_experiment_data (this)
+            events = data_eye.Events.Messages;
+            this.calibrate_times();
+            trials_start_index = find(cellfun(@(x) ~isempty(x), ...
+                                 strfind(this.events.info, 'trialNumber')) ...
+                                );
+            this.set_experiment_properties(trials_start_index); % TODO: find a way to not pass this object.
+
+        end
+    end
+
+    methods (Access = private)
+        function calibrate_times (this)
+            this.start_time_eyelink = this.events.time( ...
+                    find(strcmp(this.events.info, 'trialNumber: 1'),1) ...
+            );
+            this.events.time = this.events.time - start_time_eyelink;
+            this.eye_time_samples = this.data_eye.Samples.time - ...
+                                    this.start_time_eyelink;
+            % TODO: maybe we can put saccade calibration here too.
+        end
+
+        function set_experiment_properties (this, trials_start_index)
+            this.Properties.info = this.events.info(1:trials_start_index(1)-1);
+            this.Properties.time = this.events.time(1:trials_start_index(1)-1);
         end
     end
 
