@@ -36,11 +36,17 @@ classdef Experiment
         function extract_experiment_data (this)
             events = data_eye.Events.Messages;
             this.calibrate_times();
-            trials_start_index = find(cellfun(@(x) ~isempty(x), ...
+            trials_start_indices = find(cellfun(@(x) ~isempty(x), ...
                                  strfind(this.events.info, 'trialNumber')) ...
                                 );
-            this.set_experiment_properties(trials_start_index); % TODO: find a way to not pass this object.
-
+            this.set_experiment_properties(trial_start_indices); % TODO: find a way to not pass this object.
+            for trial_index = 1:numel(trial_start_indices)
+                trials[trial_index] = AnalysisData.Trial();
+                trials[trial_index].extract_trial_data( ...
+                                                trial_index, ...
+                                                this.events, ...
+                                                trials_start_indices ...
+                                                );
         end
     end
 
@@ -55,9 +61,9 @@ classdef Experiment
             % TODO: maybe we can put saccade calibration here too.
         end
 
-        function set_experiment_properties (this, trials_start_index)
-            this.Properties.info = this.events.info(1:trials_start_index(1)-1);
-            this.Properties.time = this.events.time(1:trials_start_index(1)-1);
+        function set_experiment_properties (this, trial_start_indices)
+            this.Properties.info = this.events.info(1:trial_start_indices(1)-1);
+            this.Properties.time = this.events.time(1:trial_start_indices(1)-1);
         end
     end
 
