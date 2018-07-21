@@ -17,7 +17,7 @@ classdef Trial
         shouldKeep = []
         goodAmount
         eye
-        reactionTime
+        reactionTime = []
         TTW
         stateTiming
     end
@@ -29,7 +29,8 @@ classdef Trial
                                 experiment_events, ...
                                 trials_start_indices, ...
                                 eye_time_samples, ...
-                                data_eye ...
+                                data_eye, ...
+                                start_time_eyelink ...
                             )
             this.set_id(trial_index, trials_start_indices, experiment_events);
             this.set_trial_events(experiment_events, trial_index, trial_start_indices);
@@ -58,6 +59,8 @@ classdef Trial
             this.set_should_keep_index(trial_index);
             this.set_good_amount_update_is_goods();
             this.eye = AnalysisData.Eye(this, data_eye);
+            this.set_reaction_time_and_update_is_good();
+            this.set_state_timings(data_eye, start_time_eyelink);
         end
     end
 
@@ -357,6 +360,60 @@ classdef Trial
                 this.isGood1 = 0;
             end
         end
+
+        function set_reaction_time_and_update_is_good (this)
+            if this.isGood1 && this.shouldKeep == 0 % ------------- in jaha chie daqiqan? :))
+                temp_point_release = find(cellfun(@(x) ~isempty(x), ...
+                                        strfind( ...
+                                                this.states.info, ...
+                                                'stimulus=>stimulus_waiter' ...
+                                        ) ...
+                                    ));
+                start_state_index  = find(cellfun(@(x) ~isempty(x), ...
+                                        strfind( ...
+                                                this.states.info, ...
+                                                'barWait=>barWait_waiter' ...
+                                        ) ...
+                                    ), 1, 'last');
+                if start_state_index < temp_point_release
+                    try
+                        release_point = find(this.bar.signal.bar( ...
+                            this.bar.signal.time > this.states.time(temp_point_release) - this.startTime ...
+                            )==0, 1);
+                        release_point_time = this.bar.signal.time(release_point);
+                        tempFromTime = find(cellfun(@(x) ~isempty(x), ...
+                                            strfind( ...
+                                                    this.states.info, ...
+                                                    'releaseWait=>releaseWait_waiter' ...
+                                            ) ...
+                                        ));
+                        this.reactionTime = release_point_time - (this.states.time(tempFromTime) - start_state_index);
+                        if isempty(this.reactionTime)
+                            this.isGood1 = 0;
+                            warning(['Bar not set to False after release in file: ' ...
+                                     datestr(time_data) '!'])
+                        elseif this.reactionTime < 0
+                            this.isGood2 = 0;
+                            this.isGood1 = 0;
+                            warning(['Bar Error Reaction time: ' ...
+                                     datestr(time_data) '!'])
+                        end
+                    catch
+                        warning(['Bar not set to False after release in file: ' ...
+                                 datestr(time_data) '!'])
+                    end
+                end
+            end
+        end
+
+        function set_state_timings (this, data_eye, start_time_eyelink)
+            if this.isGood2
+                this.stateTiming = AnalysisData.StateTimings(this.states);
+
+                this.eye.set_saccade_time(this.data_eye, this.state_timings, this.start_time_eyelink)
+            end
+        end
+
     end
 
 end

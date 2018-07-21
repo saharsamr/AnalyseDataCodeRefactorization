@@ -62,6 +62,7 @@ classdef DAO
                     continue
                 end
             end
+            this.save_data();
         end
     end
 
@@ -83,6 +84,17 @@ classdef DAO
             % load([path '.mat']); % TODO: does not save any .mat files.
             % disp('done');
         end
+
+        function save_data (this)
+            output_folder = 'D:\Analysis code\';
+            dir_name = [output_folder 'output/' TaskName '/' SubjectName '/' data_list(exp_index).name(1:end-4)];
+            warning('off', 'MATLAB:MKDIR:DirectoryExists')
+            mkdir(dir_name);
+            warning('on', 'MATLAB:MKDIR:DirectoryExists')
+            %serialized_Exp = serialize(Experiment);
+            %save([dir_name '/data.mat'], 'serialized_Exp','-v7.3')
+            save([dir_name '/data.mat'], 'Experiment')
+        end 
     end
 
 end

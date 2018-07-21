@@ -25,8 +25,22 @@ classdef Eye
             this.posy(this.posy == this.errorVal) = NaN;
             this.saccadeTime = [];
 
-        endSaccads   = data_eye.Events.Esacc.end   - start_time_eyelink; % TODO: start time eyelink is not available here.
-            startSaccads = data_eye.Events.Esacc.start - start_time_eyelink;
-
             % TODO: find a way for passing better the data_eye.
+        end
+
+        function set_saccade_time (this, data_eye, state_timings, start_time_eyelink)
+            counter = 0;
+            endSaccads   = data_eye.Events.Esacc.end   - start_time_eyelink;
+            startSaccads = data_eye.Events.Esacc.start - start_time_eyelink;
+            for saccad_index = 1:numel(endSaccads)
+                if endSaccads(saccad_index) > state_timings.trigger
+                    cut = find(this.eye.time < endSaccads(saccad_index) & this.time > startSaccads(saccad_index));
+                    if ~isempty(cut)
+                        counter = counter + 1;
+                        this.saccadeTime{counter} = this.time(cut);
+                    end
+                end
+            end
+        end 
+    end
 end
