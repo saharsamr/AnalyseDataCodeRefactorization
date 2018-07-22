@@ -131,7 +131,7 @@ classdef Trial
             end
         end
 
-        function TTW_indices = set_TTWs (this)
+        function TTW_indices = set_TTWs (this) % TODO: no use of TTW class.
             TTW_indices   = Utils.Util.find_all(this.events.info, 'TTW:');
             for TTW_index = TTW_indices
                 TTW_str = this.events.info{TTW_index};

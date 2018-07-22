@@ -9,9 +9,7 @@ classdef Experiment
         Properties
         trials = []
         data_eye
-        events
-        start_time_eyelink % TODO: some features like this, does not need to store in the final structure.
-        eye_time_samples % TODO: same TODO above.
+        events % TODO: check to ensure no extra property is set.
     end
 
     methods (Access = public)
@@ -30,7 +28,7 @@ classdef Experiment
             this.ExperimentResearcherFirstName = exResearcherFN;
             this.ExperimentResearcherLastName = exResearcherLN;
             this.startDate = startDate; %TODO: heck that this parameter is set correctly.
-            this.data_eye = data_eye
+            this.data_eye = data_eye;
         end
 
         function extract_experiment_data (this)
@@ -38,7 +36,7 @@ classdef Experiment
                             data_eye.Events.Messages.info, ...
                             data_eye.Events.Messages.time, ...
                         );
-            this.calibrate_times();
+            [start_time_eyelink, eye_time_samples] = this.calibrate_times();
             trials_start_indices = Utils.Util.find_all(this.events.info, 'trialNumber');
             this.set_experiment_properties(trial_start_indices);
             for trial_index = 1:numel(trial_start_indices)
@@ -47,9 +45,9 @@ classdef Experiment
                                                 trial_index, ...
                                                 this.events, ...
                                                 trials_start_indices, ...
-                                                this.eye_time_samples, ...
+                                                eye_time_samples, ...
                                                 this.data_eye, ...
-                                                this.start_time_eyelink ...
+                                                start_time_eyelink ...
                                     );
             end
             this.trials = this.trials([trials.isGood2 == 1]);
@@ -57,7 +55,7 @@ classdef Experiment
     end
 
     methods (Access = private)
-        function calibrate_times (this)
+        function [start_time_eyelink, eye_time_samples] = calibrate_times (this)
             this.start_time_eyelink = this.events.time( ...
                     find(strcmp(this.events.info, 'trialNumber: 1'),1) ...
             );
