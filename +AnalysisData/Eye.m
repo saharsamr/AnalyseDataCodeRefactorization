@@ -14,10 +14,10 @@ classdef Eye
                                     & ...
                                   trial.eye_time_samples <= trial.events.time(end) ...
             ;
-            this.time     = trial.eye_time_samples(eye_sample_cut_indices);
-            this.pa       = data_eye.Samples.pa(eye_sample_cut_indices, 2); % ------------- pa chie?
-            this.posx     = data_eye.Samples.posX(eye_sample_cut_indices);
-            this.posy     = data_eye.Samples.posY(eye_sample_cut_indices);
+            this.time = trial.eye_time_samples(eye_sample_cut_indices);
+            this.pa = data_eye.Samples.pa(eye_sample_cut_indices, 2); % ------------- pa chie?
+            this.posx = data_eye.Samples.posX(eye_sample_cut_indices);
+            this.posy = data_eye.Samples.posY(eye_sample_cut_indices);
             this.errorVal = -32768; % ------------- ??
 
             this.pa(this.pa == this.errorVal) = NaN;
@@ -41,6 +41,6 @@ classdef Eye
                     end
                 end
             end
-        end 
+        end
     end
 end

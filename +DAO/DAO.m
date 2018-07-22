@@ -94,7 +94,7 @@ classdef DAO
             %serialized_Exp = serialize(Experiment);
             %save([dir_name '/data.mat'], 'serialized_Exp','-v7.3')
             save([dir_name '/data.mat'], 'Experiment')
-        end 
+        end
     end
 
 end
