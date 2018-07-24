@@ -1,4 +1,4 @@
-classdef DAO
+classdef DAO < handle
 
     properties (Access = private)
         subject_name
@@ -25,7 +25,7 @@ classdef DAO
                 bar_sampling_frequency, ...
                 close_fig_flag, ...
                 data_folder_pass ...
-            )
+        )
             this.subject_name = subject_name;
             this.task_name = task_name;
             this.researcher_firstname = researcher_firstname;
@@ -42,27 +42,32 @@ classdef DAO
         function extract_experiments_data (this)
             for exp_index = 1:numel(this.data_list)
                 this.time_data = datetime(this.data_list(exp_index).name(1:20), 'InputFormat', 'dd-MMM-yyyy-HH-mm-SS');
+                disp(this.data_list(exp_index).name(1:20));
                 postfix = this.data_list(exp_index).name(22:end-4);
                 try
-                    this.validate_time_data()
-                    data_eye = this.load_data(exp_index)
+                    this.validate_time_data();
+                    data_eye = this.load_data(exp_index);
                     experiment = AnalysisData.Experiment( ...
                                             postfix, ...
                                             this.task_name, ...
                                             this.subject_name, ...
                                             this.researcher_firstname, ...
                                             this.researcher_lastname, ...
-                                            this.time_data, ...
-                                            data_eye ...
-                                );
-                    % disp('Text');
-                    experiment.extract_experiment_data();
+                                            this.time_data ...
+                    );
+                    experiment.extract_experiment_data(data_eye);
+                    % disp('****************************************');
+                    % disp(experiment);
+                    % disp('****************************************');
+                    experiment = struct(experiment);
+                    % disp('****************************************');
+                    % disp(experiment);
+                    this.save_data(exp_index, experiment);
                 catch e
-                    disp(e.message);
+                    error(e.message);
                     continue
                 end
             end
-            this.save_data();
         end
     end
 
@@ -80,20 +85,18 @@ classdef DAO
         function data_eye = load_data (this, exp_index)
             addpath('edfReader')
             path = [this.data_folder this.data_list(exp_index).name(1:end-4)];
-            data_eye = AnalysisData.Experiment_Data(Edf2Mat([path '.edf']));
+            data_eye = Edf2Mat([path '.edf']);
             % load([path '.mat']); % TODO: does not save any .mat files.
             % disp('done');
         end
 
-        function save_data (this)
+        function save_data (this, exp_index, experiment)
             output_folder = 'D:\Analysis code\';
-            dir_name = [output_folder 'output/' TaskName '/' SubjectName '/' data_list(exp_index).name(1:end-4)];
+            dir_name = [output_folder 'output/' this.task_name '/' this.subject_name '/' this.data_list(exp_index).name(1:end-4)];
             warning('off', 'MATLAB:MKDIR:DirectoryExists')
             mkdir(dir_name);
             warning('on', 'MATLAB:MKDIR:DirectoryExists')
-            %serialized_Exp = serialize(Experiment);
-            %save([dir_name '/data.mat'], 'serialized_Exp','-v7.3')
-            save([dir_name '/data.mat'], 'Experiment')
+            save([dir_name '/data.mat'], 'experiment')
         end
     end
 

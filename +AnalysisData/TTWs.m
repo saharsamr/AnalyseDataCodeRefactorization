@@ -1,6 +1,6 @@
 % TODO: All possible TTWs are set?
 
-classdef TTW
+classdef TTW < handle
     properties (Access = private)
         realfixationTTW
         realcueTTW

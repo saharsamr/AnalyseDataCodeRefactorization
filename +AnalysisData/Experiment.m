@@ -1,15 +1,13 @@
-classdef Experiment
+classdef Experiment < handle
     properties (Access = public)
         Postfix = ''
         ExperimentType = ''
-        ExperimentSubject = ''
+        ExperimentSubjectName = ''
         ExperimentResearcherFirstName = ''
         ExperimentResearcherLastName = ''
         startDate
         Properties
-        trials = []
-        data_eye
-        events % TODO: check to ensure no extra property is set.
+        trials
     end
 
     methods (Access = public)
@@ -24,52 +22,54 @@ classdef Experiment
         )
             this.Postfix = postfix;
             this.ExperimentType = exType;
-            this.ExperimentSubject =  exSubject;
+            this.ExperimentSubjectName =  exSubject;
             this.ExperimentResearcherFirstName = exResearcherFN;
             this.ExperimentResearcherLastName = exResearcherLN;
             this.startDate = startDate; %TODO: heck that this parameter is set correctly.
-            this.data_eye = data_eye;
         end
 
-        function extract_experiment_data (this)
-            events = AnalysisData.Event( ...
+        function extract_experiment_data (this, data_eye)
+            events_ = AnalysisData.Event( ...
                             data_eye.Events.Messages.info, ...
-                            data_eye.Events.Messages.time, ...
-                        );
-            [start_time_eyelink, eye_time_samples] = this.calibrate_times();
-            trials_start_indices = Utils.Util.find_all(this.events.info, 'trialNumber');
-            this.set_experiment_properties(trial_start_indices);
-            for trial_index = 1:numel(trial_start_indices)
-                trials[trial_index] = AnalysisData.Trial();
-                trials[trial_index].extract_trial_data( ...
+                            data_eye.Events.Messages.time ...
+            );
+            [start_time_eyelink, eye_time_samples] = this.calibrate_times(events_, data_eye);
+            trials_start_indices = Utils.Util.find_all(events_.info, 'trialNumber');
+            this.set_experiment_properties(events_, trials_start_indices);
+            this.trials = AnalysisData.Trial.empty(numel(trials_start_indices), 0);
+            for trial_index = 1:numel(trials_start_indices)
+                this.trials(trial_index) = AnalysisData.Trial();
+                this.trials(trial_index).extract_trial_data( ...
                                                 trial_index, ...
-                                                this.events, ...
+                                                events_, ...
+                                                this.Properties, ...
                                                 trials_start_indices, ...
                                                 eye_time_samples, ...
-                                                this.data_eye, ...
+                                                data_eye, ...
                                                 start_time_eyelink ...
-                                    );
+                );
             end
-            this.trials = this.trials([trials.isGood2 == 1]);
+            this.convert_to_struct();
+            this.filter_trials_and_convert_to_struct();
         end
     end
 
     methods (Access = private)
-        function [start_time_eyelink, eye_time_samples] = calibrate_times (this)
-            this.start_time_eyelink = this.events.time( ...
-                    find(strcmp(this.events.info, 'trialNumber: 1'),1) ...
+        function [start_time_eyelink, eye_time_samples] = calibrate_times (this, events_, data_eye)
+            start_time_eyelink = events_.time( ...
+                    find(strcmp(events_.info, 'trialNumber: 1'),1) ...
             );
-            this.events.time = this.events.time - start_time_eyelink;
-            this.eye_time_samples = this.data_eye.Samples.time - ...
-                                    this.start_time_eyelink;
+            events_.time = events_.time - start_time_eyelink;
+            eye_time_samples = data_eye.Samples.time - ...
+                                    start_time_eyelink;
             % TODO: maybe we can put saccade calibration here too.
         end
 
-        function set_experiment_properties (this, trial_start_indices)
+        function set_experiment_properties (this, events_, trials_start_indices)
             this.Properties = AnalysisData.Event( ...
-                                this.events.info(1:trial_start_indices(1)-1), ...
-                                this.events.time(1:trial_start_indices(1)-1) ...
-                             );
+                                events_.info(1:trials_start_indices(1)-1), ...
+                                events_.time(1:trials_start_indices(1)-1) ...
+            );
         end
     end
 

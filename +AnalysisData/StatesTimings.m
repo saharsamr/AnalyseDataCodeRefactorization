@@ -1,5 +1,5 @@
-classdef StatesTimings
-    properties (Access = private)
+classdef StatesTimings < handle
+    properties (Access = public)
         fixation
         cue
         stimulus

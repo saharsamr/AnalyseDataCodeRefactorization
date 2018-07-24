@@ -1,15 +1,15 @@
-classdef Bar < Event
+classdef Bar < AnalysisData.Event
     properties (Access = public)
         signal
     end
 
     methods (Access = public)
         function this = Bar(info, time)
-            this@Event(info, time)
+            this@AnalysisData.Event(info, time);
         end
 
         function remakeBarSignal(this, trialEndTime, frequency)
-            this.signal.time = floor(min(barEvents.time):0.5:trialEndTime);
+            this.signal.time = floor(min(this.time):0.5:trialEndTime);
             this.signal.bar  = zeros(1, numel(this.signal.time))-1;
 
             for event_index = 1:numel(this.info)

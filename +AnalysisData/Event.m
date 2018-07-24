@@ -11,8 +11,8 @@ classdef Event < handle
 
     methods (Access = public)
         function this = Event (info, time)
-            this.Info = info;
-            this.Time = time;
+            this.info = info;
+            this.time = time;
         end
     end
 end
