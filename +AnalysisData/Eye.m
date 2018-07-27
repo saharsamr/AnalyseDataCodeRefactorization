@@ -1,4 +1,4 @@
-classdef Eye < handle
+classdef Eye < AnalysisData.Data
     properties (Access = private)
         time = [];
         pa = []; %TODO: ask to find a better name.
@@ -15,10 +15,10 @@ classdef Eye < handle
                                   eye_time_samples <= trial_events.time(end) ...
             ;
             this.time = eye_time_samples(eye_sample_cut_indices);
-            this.pa = data_eye.Samples.pa(eye_sample_cut_indices, 2); % ------------- pa chie?
+            this.pa = data_eye.Samples.pa(eye_sample_cut_indices, 2);
             this.posx = data_eye.Samples.posX(eye_sample_cut_indices);
             this.posy = data_eye.Samples.posY(eye_sample_cut_indices);
-            this.errorVal = -32768; % ------------- ??
+            this.errorVal = -32768; % TODO
 
             this.pa(this.pa == this.errorVal) = NaN;
             this.posx(this.posx == this.errorVal) = NaN;
@@ -30,7 +30,7 @@ classdef Eye < handle
 
         function set_saccade_time (this, data_eye, state_timings, start_time_eyelink)
             counter = 0;
-        endSaccads   = data_eye.Events.Esacc.end   - start_time_eyelink;
+            endSaccads   = data_eye.Events.Esacc.end   - start_time_eyelink;
             startSaccads = data_eye.Events.Esacc.start - start_time_eyelink;
             for saccad_index = 1:numel(endSaccads)
                 if endSaccads(saccad_index) > state_timings.trigger
@@ -41,6 +41,10 @@ classdef Eye < handle
                     end
                 end
             end
+        end
+
+        function convert_properties_to_struct (this)
+            convert_properties_to_struct@AnalysisData.Data(this);
         end
     end
 end

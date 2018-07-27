@@ -1,4 +1,4 @@
-classdef Trial < handle
+classdef Trial < AnalysisData.Data
     properties (Access = public)
         ID
         events_
@@ -34,27 +34,18 @@ classdef Trial < handle
                                 start_time_eyelink ...
         )
             this.set_id(trial_index, trials_start_indices, experiment_events);
-            % disp('a');
             this.set_trial_events( ...
                                     experiment_events, ...
                                     trial_index, ...
                                     trials_start_indices ...
             );
-            % disp('b');
             this.set_trial_number();
-            % disp('c');
             this.set_times();
-            % disp('d');
             bar_index = this.set_bar_info(); % TODO: maybe it needs name improvment.
-            % disp('e');
             changed_index = this.set_changed_flag();
-            % disp('f');
             TTW_indices = this.set_TTWs();
-            % disp('g');
             kept_bar_index = Utils.Util.find_all(this.events_.info, 'keptBar:');
-            % disp('h');
             trial_ID_index = Utils.Util.find_all(this.events_.info, 'TRIALID');
-            % disp('i');
             this.set_trial_states( ...
                                    bar_index, ...
                                    changed_index, ...
@@ -62,27 +53,20 @@ classdef Trial < handle
                                    kept_bar_index, ...
                                    trial_ID_index ...
             );
-            % disp('j');
             this.set_errors();
-            % disp('k');
             this.set_reward_value();
-            % disp('l');
             this.set_cue_index(trial_index);
-            % disp('m');
             this.set_change_index(trial_index);
-            % disp('n');
             this.set_should_keep_index(trial_index);
-            % disp('o');
             this.set_good_amount(experiment_properties);
-            % disp('p');
             this.eye = AnalysisData.Eye(eye_time_samples, this.startTime, this.events_, data_eye);
-            % disp('q');
             this.set_is_goods(); % TODO: not a proper name at all!
-            % disp('r');
             this.set_reaction_time_and_update_is_good();
-            % disp('s');
             this.set_state_timings(data_eye, start_time_eyelink);
-            % disp('t');
+        end
+
+        function convert_properties_to_struct (this)
+            convert_properties_to_struct@AnalysisData.Data(this);
         end
     end
 
@@ -130,9 +114,7 @@ classdef Trial < handle
 
         function set_times (this)
             this.startTime = this.events_.time(1);
-            % disp(this.startTime);
             this.endTime = this.events_.time(end);
-            % disp('---');
         end
 
         function bar_index = set_bar_info (this)

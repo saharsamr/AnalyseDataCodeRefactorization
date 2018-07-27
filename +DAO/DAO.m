@@ -46,7 +46,9 @@ classdef DAO < handle
                 postfix = this.data_list(exp_index).name(22:end-4);
                 try
                     this.validate_time_data();
+                    disp('1');
                     data_eye = this.load_data(exp_index);
+                    disp('2');
                     experiment = AnalysisData.Experiment( ...
                                             postfix, ...
                                             this.task_name, ...
@@ -55,14 +57,15 @@ classdef DAO < handle
                                             this.researcher_lastname, ...
                                             this.time_data ...
                     );
+                    disp('3');
                     experiment.extract_experiment_data(data_eye);
-                    % disp('****************************************');
-                    % disp(experiment);
-                    % disp('****************************************');
+                    disp('4');
+                    experiment.convert_properties_to_struct();
+                    disp('5');
                     experiment = struct(experiment);
-                    % disp('****************************************');
-                    % disp(experiment);
+                    disp('6');
                     this.save_data(exp_index, experiment);
+                    disp('7');
                 catch e
                     error(e.message);
                     continue
@@ -74,7 +77,7 @@ classdef DAO < handle
     methods (Access = private)
         function validate_time_data (this)
             if this.time_data < this.time_start || ...
-                 this.time_data > this.time_end
+                this.time_data > this.time_end
                 throw (MException( ...
                     'Invalid experiment time', ...
                     'Time is out of valid range.' ...

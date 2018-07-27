@@ -1,4 +1,4 @@
-classdef Experiment < handle
+classdef Experiment < AnalysisData.Data
     properties (Access = public)
         Postfix = ''
         ExperimentType = ''
@@ -49,8 +49,13 @@ classdef Experiment < handle
                                                 start_time_eyelink ...
                 );
             end
-            this.convert_to_struct();
-            this.filter_trials_and_convert_to_struct();
+            this.filter_good_trials();
+        end
+
+        function convert_properties_to_struct (this)
+            disp('4_1');
+            convert_properties_to_struct@AnalysisData.Data(this);
+            disp('4_2');
         end
     end
 
@@ -70,6 +75,17 @@ classdef Experiment < handle
                                 events_.info(1:trials_start_indices(1)-1), ...
                                 events_.time(1:trials_start_indices(1)-1) ...
             );
+        end
+
+        function filter_good_trials (this)
+            result_index = 1;
+            for trial_index = 1:numel(this.trials)
+                if this.trials(trial_index).isGood2 == 1
+                    result(result_index) = this.trials(trial_index);
+                    result_index = result_index + 1;
+                end
+            end
+            this.trials = result;
         end
     end
 

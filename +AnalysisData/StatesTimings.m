@@ -1,4 +1,4 @@
-classdef StatesTimings < handle
+classdef StatesTimings < AnalysisData.Data
     properties (Access = public)
         fixation
         cue
@@ -46,6 +46,10 @@ classdef StatesTimings < handle
                                                         states.info, ...
                                                         'changedStimulus=>changedStimulus_waiter') ...
             );
+        end
+
+        function convert_properties_to_struct (this)
+            convert_properties_to_struct@AnalysisData.Data(this);
         end
     end
 end

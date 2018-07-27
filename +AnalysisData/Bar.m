@@ -23,5 +23,9 @@ classdef Bar < AnalysisData.Event
                 this.signal.bar(this.signal.time > this.time(event_index)) = barState;
             end
         end
+
+        function convert_properties_to_struct (this)
+            convert_properties_to_struct@AnalysisData.Event(this);
+        end
     end
 end

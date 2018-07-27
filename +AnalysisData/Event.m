@@ -3,7 +3,7 @@
 %       Some Repeatable data, such as Stetes, Bar, Event itsef, are using this class.
 %============================================
 
-classdef Event < handle
+classdef Event < AnalysisData.Data
     properties (Access = public)
         info = [];
         time = [];
@@ -13,6 +13,10 @@ classdef Event < handle
         function this = Event (info, time)
             this.info = info;
             this.time = time;
+        end
+
+        function convert_properties_to_struct (this)
+            convert_properties_to_struct@AnalysisData.Data(this);
         end
     end
 end
