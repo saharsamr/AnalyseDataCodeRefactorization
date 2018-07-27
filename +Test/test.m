@@ -2,6 +2,8 @@ addpath('.\..\');
 import CONFIG.*
 import DAO.*
 
+warning('off', 'MATLAB:structOnObject');
+
 dao = DAO.DAO ( ...
             CONFIG.Config.SUBJECT_NAME, ...
             CONFIG.Config.TASK_NAME, ...
@@ -15,3 +17,5 @@ dao = DAO.DAO ( ...
         );
 
 dao.extract_experiments_data();
+
+warning('on', 'MATLAB:structOnObject');
