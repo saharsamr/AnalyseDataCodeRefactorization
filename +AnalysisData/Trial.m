@@ -135,6 +135,7 @@ classdef Trial < AnalysisData.Data
                 elseif ~isempty(strfind(this.events_.info{changed_index(end)}, 'true'))
                     changed = 1;
                 end
+                this.changed = changed;
             end
         end
 
