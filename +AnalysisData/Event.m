@@ -1,8 +1,3 @@
-%============================================
-%   Event Class:
-%       Some Repeatable data, such as Stetes, Bar, Event itsef, are using this class.
-%============================================
-
 classdef Event < AnalysisData.Data
     properties (Access = public)
         info = [];

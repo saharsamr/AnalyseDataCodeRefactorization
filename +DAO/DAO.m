@@ -46,9 +46,7 @@ classdef DAO < handle
                 postfix = this.data_list(exp_index).name(22:end-4);
                 try
                     this.validate_time_data();
-                    disp('1');
                     data_eye = this.load_data(exp_index);
-                    disp('2');
                     experiment = AnalysisData.Experiment( ...
                                             postfix, ...
                                             this.task_name, ...
@@ -57,15 +55,10 @@ classdef DAO < handle
                                             this.researcher_lastname, ...
                                             this.time_data ...
                     );
-                    disp('3');
                     experiment.extract_experiment_data(data_eye);
-                    disp('4');
                     experiment.convert_properties_to_struct();
-                    disp('5');
                     experiment = struct(experiment);
-                    disp('6');
                     this.save_data(exp_index, experiment);
-                    disp('7');
                 catch e
                     error(e.message);
                     continue
@@ -89,17 +82,15 @@ classdef DAO < handle
             addpath('edfReader')
             path = [this.data_folder this.data_list(exp_index).name(1:end-4)];
             data_eye = Edf2Mat([path '.edf']);
-            % load([path '.mat']); % TODO: does not save any .mat files.
-            % disp('done');
         end
 
         function save_data (this, exp_index, experiment)
             output_folder = 'D:\Analysis code\';
             dir_name = [output_folder 'output/' this.task_name '/' this.subject_name '/' this.data_list(exp_index).name(1:end-4)];
-            warning('off', 'MATLAB:MKDIR:DirectoryExists')
+            warning('off', 'MATLAB:MKDIR:DirectoryExists');
             mkdir(dir_name);
-            warning('on', 'MATLAB:MKDIR:DirectoryExists')
-            save([dir_name '/data.mat'], 'experiment')
+            warning('on', 'MATLAB:MKDIR:DirectoryExists');
+            save([dir_name '/data.mat'], 'experiment');
         end
     end
 
