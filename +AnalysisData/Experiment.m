@@ -1,4 +1,9 @@
-classdef Experiment < AnalysisData.Data
+%% Experiments
+% Experiments are the container of trials which has been tested by specifics
+% value for properties.
+
+%% Experiment properties
+% These are the features that are common accross all trials and the trials itselves.
     properties (Access = public)
         Postfix = ''
         ExperimentType = ''
@@ -8,26 +13,9 @@ classdef Experiment < AnalysisData.Data
         startDate
         Properties
         trials
-    end
 
-    methods (Access = public)
-        function this = Experiment ( ...
-                postfix, ...
-                exType, ...
-                exSubject, ...
-                exResearcherFN, ...
-                exResearcherLN, ...
-                startDate, ...
-                data_eye ...
-        )
-            this.Postfix = postfix;
-            this.ExperimentType = exType;
-            this.ExperimentSubjectName =  exSubject;
-            this.ExperimentResearcherFirstName = exResearcherFN;
-            this.ExperimentResearcherLastName = exResearcherLN;
-            this.startDate = startDate; %TODO: heck that this parameter is set correctly.
-        end
-
+    %% Extract experiment data
+    % The function below just calls other functions for this extraction.
         function extract_experiment_data (this, data_eye)
             events_ = AnalysisData.Event( ...
                             data_eye.Events.Messages.info, ...
@@ -51,14 +39,11 @@ classdef Experiment < AnalysisData.Data
                 );
             end
             this.filter_good_trials();
+            this.convert_properties_to_struct();
         end
 
-        function convert_properties_to_struct (this)
-            convert_properties_to_struct@AnalysisData.Data(this);
-        end
-    end
-
-    methods (Access = private)
+    %% Calibrate Experiment times
+    % By callibration, we can analyse data with relative times.
         function [start_time_eyelink, eye_time_samples] = calibrate_times (this, events_, data_eye)
             start_time_eyelink = events_.time( ...
                     find(strcmp(events_.info, 'trialNumber: 1'),1) ...
@@ -66,9 +51,12 @@ classdef Experiment < AnalysisData.Data
             events_.time = events_.time - start_time_eyelink;
             eye_time_samples = data_eye.Samples.time - ...
                                     start_time_eyelink;
-            % TODO: maybe we can put saccade calibration here too.
         end
 
+    %% Set Experiment's Properties
+    % There are lots of features that would affect the experiment's result. For
+    % instance, the color and duration of appearance for the cue is an important
+    % factor. this function extracts these properties for furtur analysis.
         function set_experiment_properties (this, events_, trials_start_indices)
             this.Properties = AnalysisData.Event( ...
                                 events_.info(1:trials_start_indices(1)-1), ...
@@ -76,6 +64,10 @@ classdef Experiment < AnalysisData.Data
             );
         end
 
+    %% Filtering Good Trials
+    % Not all the trials are proper to participate in our analysis, the *isGood*
+    % property of each trials is the property that detect this. Here, we just
+    % filter out the trials which their *isGood* property is not equal to 1.
         function filter_good_trials (this)
             result_index = 1;
             for trial_index = 1:numel(this.trials)
@@ -86,6 +78,3 @@ classdef Experiment < AnalysisData.Data
             end
             this.trials = result;
         end
-    end
-
-end

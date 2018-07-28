@@ -1,4 +1,10 @@
-classdef Eye < AnalysisData.Data
+%% Monkey's Eye Data
+% We should keep track of monkey's eye features to determine its attention and
+% reactions. This class is responsible for that, where we can have the position
+% of its eye and their saccade times, etc, all together.
+
+%% Eye Properties
+% These properties shows the features of eyes we care about in this task.
     properties (Access = private)
         time = [];
         pa = []; %TODO: ask to find a better name.
@@ -6,9 +12,10 @@ classdef Eye < AnalysisData.Data
         posy = [];
         errorVal
         saccadeTime = [];
-    end
 
-    methods (Access = public)
+    %% Setting Eye's Features
+    % The construtor of this class, is going to extract and set the features are
+    % available below. But the saccade times are set in next function.
         function this = Eye (eye_time_samples, startTime, trial_events, data_eye)
             eye_sample_cut_indices = eye_time_samples >= startTime ...
                                     & ...
@@ -24,10 +31,11 @@ classdef Eye < AnalysisData.Data
             this.posx(this.posx == this.errorVal) = NaN;
             this.posy(this.posy == this.errorVal) = NaN;
             this.saccadeTime = [];
-
-            % TODO: find a way for passing better the data_eye.
         end
 
+    %% Set Ssaccade Times
+    % This function, as we mentioned previous, extracted the saccade times during
+    % a special trial for furture analysis.
         function set_saccade_time (this, data_eye, state_timings, start_time_eyelink)
             counter = 0;
             endSaccads   = data_eye.Events.Esacc.end   - start_time_eyelink;
@@ -42,9 +50,3 @@ classdef Eye < AnalysisData.Data
                 end
             end
         end
-
-        function convert_properties_to_struct (this)
-            convert_properties_to_struct@AnalysisData.Data(this);
-        end
-    end
-end

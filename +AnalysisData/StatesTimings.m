@@ -1,4 +1,9 @@
-classdef StatesTimings < AnalysisData.Data
+%% States Timings
+% We will stay in a specific state for a amount of time. These timings for main
+% states of the trials are kept in this class.
+
+%% Main States
+% These properties are reflecting different steps of trials.
     properties (Access = public)
         fixation
         cue
@@ -7,9 +12,10 @@ classdef StatesTimings < AnalysisData.Data
         releaseTrigger
         trigger
         changedStimulus
-    end
 
-    methods (Access = public)
+    %% Set Timings
+    % This function, has the responsibility to find the time of state transmitions
+    % by finding the index of that transmition from states info.
         function this = StatesTimings (states)
             this.fixation = states.time(Utils.Util.find_all( ...
                                                      states.info, ...
@@ -47,9 +53,3 @@ classdef StatesTimings < AnalysisData.Data
                                                         'changedStimulus=>changedStimulus_waiter') ...
             );
         end
-
-        function convert_properties_to_struct (this)
-            convert_properties_to_struct@AnalysisData.Data(this);
-        end
-    end
-end

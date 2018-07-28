@@ -1,0 +1,312 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Data Access Object (DAO)</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-07-28"><meta name="DC.source" content="DAO.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Data Access Object (DAO)</h1><!--introduction--><p>This class is the layer between the <b>eyelink</b> and <b>AnalysisData/Experiment</b> object which handles the extraction of data related to each experiment.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Common detail of several experiments</a></li><li><a href="#2">DAO Constructor</a></li><li><a href="#3">Extract Data Related to Each Experiments</a></li><li><a href="#5">Validate the Experiment Time</a></li><li><a href="#6">Load Experiment Data</a></li><li><a href="#7">Save Final Data</a></li></ul></div><h2 id="1">Common detail of several experiments</h2><p>The <b>DAO</b> class holds these properties which are common accross some experiment; such as who has done these experiments and they've done in what range of time. the <b>data_list</b> property is the list of <b>.edf</b> files receives from <b>eyelink</b> for distinct experiments.</p><pre class="codeinput">    properties (Access = private)
+        subject_name
+        task_name
+        researcher_firstname
+        researcher_lastname
+        bar_sampling_frequency
+        close_fig_flag
+        data_folder
+        data_list
+        time_start
+        time_end
+        time_data
+</pre><h2 id="2">DAO Constructor</h2><p>set the properties using passed arguments and by parsing file names and setting the related times, etc.</p><pre class="codeinput">        <span class="keyword">function</span> this = DAO ( <span class="keyword">...</span>
+                subject_name, <span class="keyword">...</span>
+                task_name, <span class="keyword">...</span>
+                researcher_firstname, <span class="keyword">...</span>
+                researcher_lastname, <span class="keyword">...</span>
+                time_start, <span class="keyword">...</span>
+                time_end, <span class="keyword">...</span>
+                bar_sampling_frequency, <span class="keyword">...</span>
+                close_fig_flag, <span class="keyword">...</span>
+                data_folder_pass <span class="keyword">...</span>
+        )
+            this.subject_name = subject_name;
+            this.task_name = task_name;
+            this.researcher_firstname = researcher_firstname;
+            this.researcher_lastname = researcher_lastname;
+            this.time_start = datetime( <span class="keyword">...</span>
+                                       time_start, <span class="keyword">...</span>
+                                       <span class="string">'InputFormat'</span>, <span class="keyword">...</span>
+                                       <span class="string">'yyyy-MM-dd HH:mm:SS'</span> <span class="keyword">...</span>
+            );
+            this.time_end = datetime( <span class="keyword">...</span>
+                                    time_end, <span class="keyword">...</span>
+                                    <span class="string">'InputFormat'</span>, <span class="keyword">...</span>
+                                    <span class="string">'yyyy-MM-dd HH:mm:SS'</span> <span class="keyword">...</span>
+            );
+            this.bar_sampling_frequency = bar_sampling_frequency;
+            this.close_fig_flag = close_fig_flag;
+            this.data_folder = data_folder_pass;
+            this.data_list = dir(fullfile(this.data_folder, <span class="string">'*.edf'</span>));
+            this.time_data = datetime( <span class="keyword">...</span>
+                                    this.data_list(1).name(1:20), <span class="keyword">...</span>
+                                    <span class="string">'InputFormat'</span>, <span class="keyword">...</span>
+                                    <span class="string">'dd-MMM-yyyy-HH-mm-SS'</span> <span class="keyword">...</span>
+            );
+        <span class="keyword">end</span>
+</pre><h2 id="3">Extract Data Related to Each Experiments</h2><p>Each <b>.edf</b> file is representing data of a specific experiment which has several trials that has been tested under the same enviroment conditions. The description of each function called here is available at the top of that function definition.</p><pre class="codeinput">        <span class="keyword">function</span> extract_experiments_data (this)
+            <span class="keyword">for</span> exp_index = 1:numel(this.data_list)
+                this.time_data = datetime( <span class="keyword">...</span>
+                                        this.data_list(exp_index).name(1:20), <span class="keyword">...</span>
+                                        <span class="string">'InputFormat'</span>, <span class="keyword">...</span>
+                                        <span class="string">'dd-MMM-yyyy-HH-mm-SS'</span> <span class="keyword">...</span>
+                );
+                disp(this.data_list(exp_index).name(1:20));
+                postfix = this.data_list(exp_index).name(22:end-4);
+                <span class="keyword">try</span>
+                    this.validate_time_data();
+                    data_eye = this.load_data(exp_index);
+                    experiment = AnalysisData.Experiment( <span class="keyword">...</span>
+                                            postfix, <span class="keyword">...</span>
+                                            this.task_name, <span class="keyword">...</span>
+                                            this.subject_name, <span class="keyword">...</span>
+                                            this.researcher_firstname, <span class="keyword">...</span>
+                                            this.researcher_lastname, <span class="keyword">...</span>
+                                            this.time_data <span class="keyword">...</span>
+                    );
+                    experiment.extract_experiment_data(data_eye);
+                    experiment = struct(experiment);
+                    this.save_data(exp_index, experiment);
+                <span class="keyword">catch</span> e
+                    error(e.message);
+                    <span class="keyword">continue</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+</pre><h2 id="5">Validate the Experiment Time</h2><p>We previously mentioned that the <b>DAO</b> try to extract data of experiments which has common situations, specially the range of time they has been experimented. This function is checking that the <b>.edf</b> file time data is compatible with the time that we set in the config file. (those configs are passed to experiment using DAO class.)</p><pre class="codeinput">        <span class="keyword">function</span> validate_time_data (this)
+            <span class="keyword">if</span> this.time_data &lt; this.time_start || <span class="keyword">...</span>
+                this.time_data &gt; this.time_end
+                throw (MException( <span class="keyword">...</span>
+                    <span class="string">'Invalid experiment time'</span>, <span class="keyword">...</span>
+                    <span class="string">'Time is out of valid range.'</span> <span class="keyword">...</span>
+                ));
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+</pre><h2 id="6">Load Experiment Data</h2><p>At this step, by help of an external library, which the codes are located in the <b>edfReader</b> folder, we translate the <b>.edf</b> format to the proper <b>.mat</b> format for easier use of data in future.</p><pre class="codeinput">        <span class="keyword">function</span> data_eye = load_data (this, exp_index)
+            addpath(<span class="string">'edfReader'</span>)
+            path = [this.data_folder this.data_list(exp_index).name(1:end-4)];
+            data_eye = Edf2Mat([path <span class="string">'.edf'</span>]);
+        <span class="keyword">end</span>
+</pre><h2 id="7">Save Final Data</h2><p>After extraction of data related to each experimetn, we need to store the retreived data in a <b>.mat</b> file to be easily available for future need of them. This function is doing that.</p><pre class="codeinput">        <span class="keyword">function</span> save_data (this, exp_index, experiment)
+            output_folder = <span class="string">'Folder Pass to Save the Result'</span>;
+            dir_name = [Directory that we want to have to reach to saved data];
+            warning(<span class="string">'off'</span>, <span class="string">'MATLAB:MKDIR:DirectoryExists'</span>);
+            mkdir(dir_name);
+            warning(<span class="string">'on'</span>, <span class="string">'MATLAB:MKDIR:DirectoryExists'</span>);
+            save([dir_name <span class="string">'/data.mat'</span>], <span class="string">'experiment'</span>);
+        <span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Data Access Object (DAO)
+% This class is the layer between the *eyelink* and *AnalysisData/Experiment*
+% object which handles the extraction of data related to each experiment.
+
+
+%% Common detail of several experiments
+% The *DAO* class holds these properties which are common accross some
+% experiment; such as who has done these experiments and they've done in what
+% range of time.
+% the *data_list* property is the list of *.edf* files receives from *eyelink*
+% for distinct experiments.
+    properties (Access = private)
+        subject_name
+        task_name
+        researcher_firstname
+        researcher_lastname
+        bar_sampling_frequency
+        close_fig_flag
+        data_folder
+        data_list
+        time_start
+        time_end
+        time_data
+
+    %% DAO Constructor
+    % set the properties using passed arguments and by parsing file names and
+    % setting the related times, etc.
+        function this = DAO ( ...
+                subject_name, ...
+                task_name, ...
+                researcher_firstname, ...
+                researcher_lastname, ...
+                time_start, ...
+                time_end, ...
+                bar_sampling_frequency, ...
+                close_fig_flag, ...
+                data_folder_pass ...
+        )
+            this.subject_name = subject_name;
+            this.task_name = task_name;
+            this.researcher_firstname = researcher_firstname;
+            this.researcher_lastname = researcher_lastname;
+            this.time_start = datetime( ...
+                                       time_start, ...
+                                       'InputFormat', ...
+                                       'yyyy-MM-dd HH:mm:SS' ...
+            );
+            this.time_end = datetime( ...
+                                    time_end, ...
+                                    'InputFormat', ...
+                                    'yyyy-MM-dd HH:mm:SS' ...
+            );
+            this.bar_sampling_frequency = bar_sampling_frequency;
+            this.close_fig_flag = close_fig_flag;
+            this.data_folder = data_folder_pass;
+            this.data_list = dir(fullfile(this.data_folder, '*.edf'));
+            this.time_data = datetime( ...
+                                    this.data_list(1).name(1:20), ...
+                                    'InputFormat', ...
+                                    'dd-MMM-yyyy-HH-mm-SS' ...
+            );
+        end
+
+
+    %% Extract Data Related to Each Experiments
+    % Each *.edf* file is representing data of a specific experiment which
+    % has several trials that has been tested under the same enviroment
+    % conditions.
+    % The description of each function called here is available at the top
+    % of that function definition.
+        function extract_experiments_data (this)
+            for exp_index = 1:numel(this.data_list)
+                this.time_data = datetime( ...
+                                        this.data_list(exp_index).name(1:20), ...
+                                        'InputFormat', ...
+                                        'dd-MMM-yyyy-HH-mm-SS' ...
+                );
+                disp(this.data_list(exp_index).name(1:20));
+                postfix = this.data_list(exp_index).name(22:end-4);
+                try
+                    this.validate_time_data();
+                    data_eye = this.load_data(exp_index);
+                    experiment = AnalysisData.Experiment( ...
+                                            postfix, ...
+                                            this.task_name, ...
+                                            this.subject_name, ...
+                                            this.researcher_firstname, ...
+                                            this.researcher_lastname, ...
+                                            this.time_data ...
+                    );
+                    experiment.extract_experiment_data(data_eye);
+                    experiment = struct(experiment);
+                    this.save_data(exp_index, experiment);
+                catch e
+                    error(e.message);
+                    continue
+                end
+            end
+        end
+    end
+
+    %% Validate the Experiment Time
+    % We previously mentioned that the *DAO* try to extract data of experiments
+    % which has common situations, specially the range of time they has been
+    % experimented.
+    % This function is checking that the *.edf* file time data is compatible
+    % with the time that we set in the config file. (those configs are passed
+    % to experiment using DAO class.)
+        function validate_time_data (this)
+            if this.time_data < this.time_start || ...
+                this.time_data > this.time_end
+                throw (MException( ...
+                    'Invalid experiment time', ...
+                    'Time is out of valid range.' ...
+                ));
+            end
+        end
+
+    %% Load Experiment Data
+    % At this step, by help of an external library, which the codes are located
+    % in the *edfReader* folder, we translate the *.edf* format to the proper
+    % *.mat* format for easier use of data in future.
+        function data_eye = load_data (this, exp_index)
+            addpath('edfReader')
+            path = [this.data_folder this.data_list(exp_index).name(1:end-4)];
+            data_eye = Edf2Mat([path '.edf']);
+        end
+
+    %% Save Final Data
+    % After extraction of data related to each experimetn, we need to store the
+    % retreived data in a *.mat* file to be easily available for future need of
+    % them. This function is doing that.
+        function save_data (this, exp_index, experiment)
+            output_folder = 'Folder Pass to Save the Result';
+            dir_name = [Directory that we want to have to reach to saved data];
+            warning('off', 'MATLAB:MKDIR:DirectoryExists');
+            mkdir(dir_name);
+            warning('on', 'MATLAB:MKDIR:DirectoryExists');
+            save([dir_name '/data.mat'], 'experiment');
+        end
+
+##### SOURCE END #####
+--></body></html>

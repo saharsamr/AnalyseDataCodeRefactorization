@@ -1,0 +1,133 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Utils</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-07-28"><meta name="DC.source" content="Util.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Utils</h1><!--introduction--><p>This class contains helping function which we may need for data extraction and are not related to a specific part of analyse.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Find the Indecis of All Accurances</a></li><li><a href="#2">Check the Existance of a Special key</a></li><li><a href="#3">Find the Index of the Last Accurance</a></li><li><a href="#4">Find In a String and Convert To Double</a></li></ul></div><h2 id="1">Find the Indecis of All Accurances</h2><p>This funtion take two arguments, the <b>container</b> and the <b>key</b>. then will search in container and return the indecis of all accurance of the key.</p><pre class="codeinput">        <span class="keyword">function</span> indices = find_all (container, key)
+            indices = find(cellfun(@(x) ~isempty(x), <span class="keyword">...</span>
+                           strfind(container, key) <span class="keyword">...</span>
+                       )) <span class="keyword">...</span>
+            ;
+        <span class="keyword">end</span>
+</pre><h2 id="2">Check the Existance of a Special key</h2><p>This function again takes the <b>container</b> and <b>key</b>, and this time, checks wether there exist an accurance of that key in container or not. The output of this function is a <b>boolean</b>.</p><pre class="codeinput">        <span class="keyword">function</span> result = do_exist (container, key)
+            result = ~isempty(Utils.Util.find_all(container, key));
+        <span class="keyword">end</span>
+</pre><h2 id="3">Find the Index of the Last Accurance</h2><p>Here, the function returns the index of last accurance of the key in the container passed to it as arguments.</p><pre class="codeinput">        <span class="keyword">function</span> result = find_last (container, key)
+            result = find(cellfun(@(x) ~isempty(x), <span class="keyword">...</span>
+                         strfind(container, key) <span class="keyword">...</span>
+                 ), 1, <span class="string">'last'</span> <span class="keyword">...</span>
+            );
+         <span class="keyword">end</span>
+</pre><h2 id="4">Find In a String and Convert To Double</h2><p>The functionality of this function is that it takes 3 arguments, first the <b>string</b> in which it should search for the double value, seconde the <b>deliminator</b> that deliminates the explanation and the value itself, third the <b>diff index</b> which stands for number of characters we should pass after the deliminator to retreive the double value. Finally this function will parse this value to double and return.</p><pre class="codeinput">         <span class="keyword">function</span> result = substr2double (string, delimeter, diff_index)
+             result = str2double(string(strfind(string, delimeter)+diff_index : end));
+         <span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Utils
+% This class contains helping function which we may need for data extraction and
+% are not related to a specific part of analyse.
+
+    %% Find the Indecis of All Accurances
+    % This funtion take two arguments, the *container* and the *key*. then will
+    % search in container and return the indecis of all accurance of the key.
+        function indices = find_all (container, key)
+            indices = find(cellfun(@(x) ~isempty(x), ...
+                           strfind(container, key) ...
+                       )) ...
+            ;
+        end
+
+    %% Check the Existance of a Special key
+    % This function again takes the *container* and *key*, and this time, checks
+    % wether there exist an accurance of that key in container or not. The output
+    % of this function is a *boolean*.
+        function result = do_exist (container, key)
+            result = ~isempty(Utils.Util.find_all(container, key));
+        end
+
+    %% Find the Index of the Last Accurance
+    % Here, the function returns the index of last accurance of the key in the
+    % container passed to it as arguments.
+        function result = find_last (container, key)
+            result = find(cellfun(@(x) ~isempty(x), ...
+                         strfind(container, key) ...
+                 ), 1, 'last' ...
+            );
+         end
+
+    %% Find In a String and Convert To Double
+    % The functionality of this function is that it takes 3 arguments, first the
+    % *string* in which it should search for the double value, seconde the
+    % *deliminator* that deliminates the explanation and the value itself, third
+    % the *diff index* which stands for number of characters we should pass after
+    % the deliminator to retreive the double value. Finally this function will
+    % parse this value to double and return.
+         function result = substr2double (string, delimeter, diff_index)
+             result = str2double(string(strfind(string, delimeter)+diff_index : end));
+         end
+
+##### SOURCE END #####
+--></body></html>

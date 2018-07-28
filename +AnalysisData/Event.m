@@ -1,3 +1,10 @@
+%% The Event Class
+% This class is going to be used *whenever* we have a property that should be
+% describe in terms of matching *info* and *time* arrays to describe the behaiviour
+% of our object or system.
+
+%TODO: Add checking for same sizes later.
+
 classdef Event < AnalysisData.Data
     properties (Access = public)
         info = [];
@@ -8,10 +15,6 @@ classdef Event < AnalysisData.Data
         function this = Event (info, time)
             this.info = info;
             this.time = time;
-        end
-
-        function convert_properties_to_struct (this)
-            convert_properties_to_struct@AnalysisData.Data(this);
         end
     end
 end
