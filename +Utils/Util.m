@@ -18,8 +18,16 @@ classdef Util
             );
          end
 
-         function result = substr2double (string, delimeter, diff_index)
-             result = str2double(string(strfind(string, delimeter)+diff_index : end));
+         function result = substr2double (string, start_delimeter, start_diff_index, end_delimeter, end_diff_index)
+             if nargin < 4
+                 result = str2double(string(strfind(string, start_delimeter)+start_diff_index:end));
+             else
+                 result = str2double(string( ...
+                                    strfind(string, start_delimeter)+start_diff_index ...
+                                    : ...
+                                    strfind(string, end_delimeter)-end_diff_index) ...
+                );
+            end
          end
     end
 end
