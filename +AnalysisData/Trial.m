@@ -145,8 +145,8 @@ classdef Trial < AnalysisData.Data
                                                       this.states.info, ...
                                                       'barWait=>barWait_waiter' ...
             );
-            error_index = Utils.Util.find_all(this.states.info, '=>error');
-            this.error = (~isempty(error_index)) && (error_index > start_state_index);
+            error_index = Utils.Util.find_last(this.states.info, '=>error');
+            this.error = (~isempty(error_index)) & (error_index > start_state_index);
         end
 
         function set_reward_value (this)

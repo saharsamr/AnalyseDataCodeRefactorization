@@ -1,10 +1,8 @@
-classdef OrientationTrial < AnalysisData.Trial
+classdef OrientationTrial < AnalysisData.Trial %TODO: fix reward value bug for this trial.
     properties (Access = public)
-        stimulus_name
-        stimulus_number_in_trial
-        real_stimulus_show_time
-        failed_trial
-        reward
+        orientation_number
+        % stimulus_number_in_trial %TODO: what does this do?
+        % real_stimulus_show_time
     end
 
     methods (Access = public)
@@ -36,14 +34,20 @@ classdef OrientationTrial < AnalysisData.Trial
             this.update_used_indices(tracker_indices);
             keyboard_indices = Utils.Util.find_all(this.trial_events.info, 'keyboard');
             this.update_used_indices(keyboard_indices);
+            keyboard_indices = Utils.Util.find_all(this.trial_events.info, 'TRIALID');
+            this.update_used_indices(keyboard_indices);
+            failed_trial_indices = Utils.Util.find_all(this.trial_events.info, 'failedTrial');
+            this.update_used_indices(failed_trial_indices);
+            this.set_orientation_number();
         end
 
         function set_states_of_trail (this, trial_index)
             set_states_of_trail@AnalysisData.Trial(this);
         end
 
-        function set_goodness_and_reward_of_trial (this)
+        function set_goodness_and_reward_of_trial (this, properties, start_date)
             set_goodness_and_reward_of_trial@AnalysisData.Trial(this);
+            this.is_good_trial = ~this.error;
         end
 
         function convert_properties_to_struct (this)
@@ -52,6 +56,18 @@ classdef OrientationTrial < AnalysisData.Trial
     end
 
     methods (Access = protected)
+        function set_orientation_number (this)
+            stimulus_name_index = Utils.Util.find_last( ...
+                                                      this.trial_events.info, ...
+                                                      'stimulusName' ...
+            );
+            if(~isempty(stimulus_name_index))
+                stimulus_str = this.trial_events.info{stimulus_name_index};
+                this.orientation_number = Utils.Util.substr2double(stimulus_str, ':', 3, '&', 1);
+            end
+            this.update_used_indices(stimulus_name_index);
+        end
+
         function update_used_indices (this, new_indices)
             update_used_indices@AnalysisData.Trial(this, new_indices);
         end
