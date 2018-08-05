@@ -42,10 +42,10 @@ classdef DAO < handle
         function extract_experiments_data (this)
             for exp_index = 1:numel(this.data_list)
                 this.time_data = datetime(this.data_list(exp_index).name(1:20), 'InputFormat', 'dd-MMM-yyyy-HH-mm-SS');
-                disp(this.data_list(exp_index).name(1:20));
                 postfix = this.data_list(exp_index).name(22:end-4);
                 try
                     this.validate_time_data();
+                    disp(this.data_list(exp_index).name(1:20));
                     data_eye = this.load_data(exp_index);
                     experiment = AnalysisData.Experiment( ...
                                             postfix, ...
@@ -60,7 +60,7 @@ classdef DAO < handle
                     experiment = struct(experiment);
                     this.save_data(exp_index, experiment);
                 catch e
-                    error(e.message);
+                    disp(e.message);
                     continue
                 end
             end
@@ -72,7 +72,7 @@ classdef DAO < handle
             if this.time_data < this.time_start || ...
                 this.time_data > this.time_end
                 throw (MException( ...
-                    'Invalid experiment time', ...
+                    'DAO:ValidateTime', ...
                     'Time is out of valid range.' ...
                 ));
             end
@@ -85,7 +85,7 @@ classdef DAO < handle
         end
 
         function save_data (this, exp_index, experiment)
-            output_folder = 'D:\Analysis code\';
+            output_folder = 'E:\IPM\EyeLink_DataExtraction\RefactoredCodes\';
             dir_name = [output_folder 'output/' this.task_name '/' this.subject_name '/' this.data_list(exp_index).name(1:end-4)];
             warning('off', 'MATLAB:MKDIR:DirectoryExists');
             mkdir(dir_name);

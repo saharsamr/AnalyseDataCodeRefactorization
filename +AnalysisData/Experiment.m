@@ -25,7 +25,7 @@ classdef Experiment < AnalysisData.Data
             this.ExperimentSubjectName =  exSubject;
             this.ExperimentResearcherFirstName = exResearcherFN;
             this.ExperimentResearcherLastName = exResearcherLN;
-            this.startDate = startDate; %TODO: heck that this parameter is set correctly.
+            this.startDate = startDate;
         end
 
         function extract_experiment_data (this, data_eye)
@@ -36,9 +36,13 @@ classdef Experiment < AnalysisData.Data
             [start_time_eyelink, eye_time_samples] = this.calibrate_times(events_, data_eye);
             trials_start_indices = Utils.Util.find_all(events_.info, 'trialNumber');
             this.set_experiment_properties(events_, trials_start_indices);
-            this.trials = AnalysisData.Trial.empty(numel(trials_start_indices), 0);
+            this.trials = AnalysisData.([CONFIG.Config.TASK_NAME 'Trial']).empty(numel(trials_start_indices), 0);
             for trial_index = 1:numel(trials_start_indices)
-                this.trials(trial_index) = AnalysisData.Trial();
+                this.trials(trial_index) = eval(([ ...
+                                                    'AnalysisData.' ...
+                                                    CONFIG.Config.TASK_NAME ...
+                                                    'Trial'...
+                ]));
                 this.trials(trial_index).extract_trial_data( ...
                                                 trial_index, ...
                                                 events_, ...
@@ -48,6 +52,11 @@ classdef Experiment < AnalysisData.Data
                                                 eye_time_samples, ...
                                                 data_eye, ...
                                                 start_time_eyelink ...
+                );
+                this.trials(trial_index).set_states_of_trail(trial_index);
+                this.trials(trial_index).set_goodness_and_reward_of_trial( ...
+                                                this.Properties, ...
+                                                this.startDate ...
                 );
             end
             this.filter_good_trials();
@@ -59,7 +68,7 @@ classdef Experiment < AnalysisData.Data
     end
 
     methods (Access = private)
-        function [start_time_eyelink, eye_time_samples] = calibrate_times (this, events_, data_eye)
+        function [start_time_eyelink, eye_time_samples] = calibrate_times(this, events_, data_eye)
             start_time_eyelink = events_.time( ...
                     find(strcmp(events_.info, 'trialNumber: 1'),1) ...
             );
@@ -79,7 +88,7 @@ classdef Experiment < AnalysisData.Data
         function filter_good_trials (this)
             result_index = 1;
             for trial_index = 1:numel(this.trials)
-                if this.trials(trial_index).isGood2 == 1
+                if this.trials(trial_index).is_good_trial == 1
                     result(result_index) = this.trials(trial_index);
                     result_index = result_index + 1;
                 end

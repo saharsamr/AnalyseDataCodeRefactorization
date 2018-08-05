@@ -2,6 +2,10 @@ addpath('.\..\');
 import CONFIG.*
 import DAO.*
 
+clear all
+close all
+clc
+
 warning('off', 'MATLAB:structOnObject');
 
 dao = DAO.DAO ( ...
