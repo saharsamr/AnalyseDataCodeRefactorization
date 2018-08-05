@@ -37,9 +37,9 @@ classdef Trial < AnalysisData.Data
             this.set_trial_number();
             this.set_times();
             bar_indices = this.set_bar_info();
-            this.update_used_incides(bar_indices);
+            this.update_used_indices(bar_indices);
             TTW_indices = this.set_TTWs();
-            this.update_used_incides(TTW_indices);
+            this.update_used_indices(TTW_indices);
             this.eye = AnalysisData.Eye( ...
                                             eye_time_samples, ...
                                             this.start_time, ...
@@ -171,7 +171,7 @@ classdef Trial < AnalysisData.Data
             end
         end
 
-        function update_used_incides (this, new_indices)
+        function update_used_indices (this, new_indices)
             this.used_indices = union(this.used_indices, new_indices);
         end
     end

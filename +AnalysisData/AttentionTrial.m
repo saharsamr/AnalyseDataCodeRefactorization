@@ -33,11 +33,11 @@ classdef AttentionTrial < AnalysisData.Trial
                                     start_time_eyelink ...
             );
             changed_index = this.set_changed_flag();
-            this.update_used_incides(changed_index);
+            this.update_used_indices(changed_index);
             kept_bar_index = Utils.Util.find_all(this.trial_events.info, 'keptBar:');
-            this.update_used_incides(kept_bar_index);
+            this.update_used_indices(kept_bar_index);
             trial_ID_index = Utils.Util.find_all(this.trial_events.info, 'TRIALID');
-            this.update_used_incides(trial_ID_index);
+            this.update_used_indices(trial_ID_index);
         end
 
         function set_states_of_trail (this, trial_index)
@@ -213,8 +213,8 @@ classdef AttentionTrial < AnalysisData.Trial
             end
         end
 
-        function update_used_incides (this, new_indices)
-            update_used_incides@AnalysisData.Trial(this, new_indices);
+        function update_used_indices (this, new_indices)
+            update_used_indices@AnalysisData.Trial(this, new_indices);
         end
     end
 
