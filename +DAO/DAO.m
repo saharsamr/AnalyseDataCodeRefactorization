@@ -46,16 +46,15 @@ classdef DAO < handle
                 try
                     this.validate_time_data();
                     disp(this.data_list(exp_index).name(1:20));
-                    data_eye = this.load_data(exp_index);
-                    experiment = AnalysisData.Experiment( ...
-                                            postfix, ...
-                                            this.task_name, ...
-                                            this.subject_name, ...
-                                            this.researcher_firstname, ...
-                                            this.researcher_lastname, ...
-                                            this.time_data ...
+                    experiment = Experiments.([CONFIG.Config.TASK_NAME 'Experiment'])( ...
+                                postfix, ...
+                                this.task_name, ...
+                                this.subject_name, ...
+                                this.researcher_firstname, ...
+                                this.researcher_lastname, ...
+                                this.time_data ...
                     );
-                    experiment.extract_experiment_data(data_eye);
+                    experiment.extract_experiment_data(exp_index);
                     experiment.convert_properties_to_struct();
                     experiment = struct(experiment);
                     this.save_data(exp_index, experiment);
@@ -78,12 +77,6 @@ classdef DAO < handle
             end
         end
 
-        function data_eye = load_data (this, exp_index)
-            addpath('edfReader')
-            path = [this.data_folder this.data_list(exp_index).name(1:end-4)];
-            data_eye = Edf2Mat([path '.edf']);
-        end
-
         function save_data (this, exp_index, experiment)
             output_folder = 'E:\IPM\EyeLink_DataExtraction\RefactoredCodes\';
             dir_name = [output_folder 'output/' this.task_name '/' this.subject_name '/' this.data_list(exp_index).name(1:end-4)];
@@ -91,6 +84,21 @@ classdef DAO < handle
             mkdir(dir_name);
             warning('on', 'MATLAB:MKDIR:DirectoryExists');
             save([dir_name '/data.mat'], 'experiment');
+        end
+    end
+
+    methods (Static)
+        function data_eye = load_eyelink_data (exp_index)
+            data_folder = CONFIG.Config.EYELINK_DATA_PATH;
+            data_list = dir(fullfile(data_folder, '*.edf'));
+            path = [data_folder data_list(exp_index).name(1:end-4)];
+            data_eye = Edf2Mat([path '.edf']);
+        end
+
+        function [NEV, NS5] = load_blackrock_data (exp_index) %TODO: ask for set a prper name for br data too.
+            path = CONFIG.Config.BLACKROCK_DATA_PATH;
+            NEV = openNEV([path 'OR-2.nev'], 'overwrite');
+            NS5 = openNSx([path 'OR-2.ns6']);
         end
     end
 

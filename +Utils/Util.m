@@ -18,6 +18,13 @@ classdef Util
             );
          end
 
+         function result = find_first (container, key)
+             result = find(cellfun(@(x) ~isempty(x), ...
+                          strfind(container, key) ...
+                  ), 1 ...
+             );
+          end
+
          function result = substr2double (string, start_delimeter, start_diff_index, end_delimeter, end_diff_index)
              if nargin < 4
                  result = str2double(string(strfind(string, start_delimeter)+start_diff_index:end));
