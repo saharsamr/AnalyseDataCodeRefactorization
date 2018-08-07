@@ -2,6 +2,9 @@ classdef HartleyTrial < Trials.Trial
     properties (Access = public)
         % stimulus_data %TODO: get proper data from the hartley.mat whenever it's needed. not here.
         stimulus_names
+        start_fixation_time
+        start_stimulus_time
+        reward_time
     end
 
     methods (Access = public)
@@ -51,6 +54,7 @@ classdef HartleyTrial < Trials.Trial
             set_states_of_trail@Trials.Trial(this);
             this.set_acceptable_states('stimulusNumberInTrial: 0');
             this.set_stimulus_name();
+            this.set_important_states_times();
         end
 
         function set_goodness_and_reward_of_trial (this, properties, start_date)
@@ -59,6 +63,10 @@ classdef HartleyTrial < Trials.Trial
                                             'barWait=>barWait_waiter', ...
                                             'releaseWait_waiter=>reward' ...
             );
+        end
+
+        function set_spike_times (this, time_stamp_11)
+            set_spike_times@Trials.Trial(this, time_stamp_11);
         end
 
         function convert_properties_to_struct (this)
@@ -76,6 +84,12 @@ classdef HartleyTrial < Trials.Trial
                 );
             end
             this.update_used_indices(stimulus_name_index);
+        end
+
+        function set_important_states_times (this)
+            this.start_fixation_time = this.find_state_time('startFixation=>startFixation_waiter');
+            this.start_stimulus_time = this.find_state_time('stimulus=>stimulus_waiter');
+            this.reward_time = this.find_state_time('releaseWait_waiter=>reward');
         end
 
         function set_acceptable_states (this, start_of_each_trial)

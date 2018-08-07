@@ -9,6 +9,7 @@ classdef Trial < AnalysisData.Data
         error
         reward_value
         states
+        spike_times
         is_good_trial
         eye
         TTW
@@ -58,6 +59,17 @@ classdef Trial < AnalysisData.Data
         function set_states_of_trail (this)
             this.set_trial_states_transmitions();
             % TODO: implement this method, for all subclasses.
+        end
+
+        function set_spike_times (this, time_stamp_11)
+            try
+                this.spike_times = time_stamp_11( ...
+                                        time_stamp_11 < this.reward_time ...
+                                        & ...
+                                        time_stamp_11 > this.start_fixation_time ...
+                );
+            catch
+            end
         end
 
         function convert_properties_to_struct (this)

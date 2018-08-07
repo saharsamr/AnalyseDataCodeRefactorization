@@ -4,7 +4,6 @@ classdef OrientationTrial < Trials.Trial %TODO: fix reward value bug for this tr
         start_fixation_time
         start_stimulus_time
         reward_time
-        spike_times
         % stimulus_number_in_trial %TODO: what does this do?
         % real_stimulus_show_time
     end
@@ -61,14 +60,7 @@ classdef OrientationTrial < Trials.Trial %TODO: fix reward value bug for this tr
         end
 
         function set_spike_times (this, time_stamp_11)
-            try
-                this.spike_times = time_stamp_11( ...
-                                        time_stamp_11 < this.reward_time ...
-                                        & ...
-                                        time_stamp_11 > this.start_fixation_time ...
-                );
-            catch
-            end
+            set_spike_times@Trials.Trial(this, time_stamp_11);
         end
 
         function convert_properties_to_struct (this)

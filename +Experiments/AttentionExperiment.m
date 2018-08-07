@@ -12,7 +12,7 @@ classdef AttentionExperiment < Experiments.Experiment
         end
 
         function extract_experiment_data (this, exp_index)
-            extract_experiment_data@Experiments.Experiment(this, exp_index);
+            extract_experiment_el_data@Experiments.Experiment(this, exp_index);
         end
 
         function convert_properties_to_struct (this)
