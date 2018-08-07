@@ -45,17 +45,20 @@ classdef HartleyTrial < Trials.Trial
             this.update_used_indices(keyboard_indices);
             keyboard_indices = Utils.Util.find_all(this.trial_events.info, 'realstimulusShowTime');
             this.update_used_indices(keyboard_indices);
-            % this.set_stimulus_data();
-            this.set_stimulus_name();
         end
 
         function set_states_of_trail (this, trial_index)
             set_states_of_trail@Trials.Trial(this);
+            this.set_acceptable_states('stimulusNumberInTrial: 0');
+            this.set_stimulus_name();
         end
 
         function set_goodness_and_reward_of_trial (this, properties, start_date)
             set_goodness_and_reward_of_trial@Trials.Trial(this);
-            this.is_good_trial = ~this.error;
+            this.check_trial_goodness_by_states( ...
+                                            'barWait=>barWait_waiter', ...
+                                            'releaseWait_waiter=>reward' ...
+            );
         end
 
         function convert_properties_to_struct (this)
@@ -64,7 +67,7 @@ classdef HartleyTrial < Trials.Trial
     end
 
     methods (Access = protected)
-        function set_stimulus_name (this)  %TODO: all of them? orjust after the last 'barWait=>barWait_waiter'?
+        function set_stimulus_name (this)
             stimulus_name_index = Utils.Util.find_all(this.trial_events.info, 'stimulusName');
             if(~isempty(stimulus_name_index))
                 this.stimulus_names = AnalysisData.Event ( ...
@@ -73,6 +76,14 @@ classdef HartleyTrial < Trials.Trial
                 );
             end
             this.update_used_indices(stimulus_name_index);
+        end
+
+        function set_acceptable_states (this, start_of_each_trial)
+            set_acceptable_states@Trials.Trial(this, start_of_each_trial);
+        end
+
+        function check_trial_goodness_by_states (this, start_state, end_state)
+            check_trial_goodness_by_states@Trials.Trial(this, start_state, end_state);
         end
 
         function state_index = find_state_time (this, state_name)

@@ -160,6 +160,21 @@ classdef Trial < AnalysisData.Data
             end
         end
 
+        function set_acceptable_states (this, start_of_each_trial)
+            start_real_trial = Utils.Util.find_last( ...
+                                                    this.states.info, ...
+                                                    start_of_each_trial ...
+            );
+            this.states.info =this.states.info(start_real_trial:end);
+            this.states.time = this.states.time(start_real_trial:end);
+        end
+
+        function check_trial_goodness_by_states (this, start_state, end_state)
+            start_index = Utils.Util.find_all(this.states.info, start_state);
+        end_index = Utils.Util.find_all(this.states.info, end_state);
+            this.is_good_trial = (~isempty(start_index) & (~isempty(end_index)));
+        end
+
         function state_time = find_state_time (this, state_name)
             state_time = this.states.time( ...
                             Utils.Util.find_last(this.states.info, state_name) ...

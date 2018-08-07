@@ -47,14 +47,17 @@ classdef OrientationTrial < Trials.Trial %TODO: fix reward value bug for this tr
 
         function set_states_of_trail (this, trial_index)
             set_states_of_trail@Trials.Trial(this);
-            this.set_acceptable_states();
+            this.set_acceptable_states('stimulusNumberInTrial: 0');
             this.set_orientation_number();
             this.set_important_states_times();
         end
 
         function set_goodness_and_reward_of_trial (this, properties, start_date)
             set_goodness_and_reward_of_trial@Trials.Trial(this);
-            this.check_orientation_trial_goodness();
+            this.check_trial_goodness_by_states( ...
+                                            'barWait=>barWait_waiter', ...
+                                            'releaseWait_waiter=>reward' ...
+            );
         end
 
         function set_spike_times (this, time_stamp_11)
@@ -86,25 +89,18 @@ classdef OrientationTrial < Trials.Trial %TODO: fix reward value bug for this tr
             this.update_used_indices(stimulus_name_index);
         end
 
-        function set_acceptable_states (this)
-            start_real_trial = Utils.Util.find_last( ...
-                                                    this.states.info, ...
-                                                    'stimulusNumberInTrial: 0' ...
-            );
-            this.states.info =this.states.info(start_real_trial:end);
-            this.states.time = this.states.time(start_real_trial:end);
-        end
-
         function set_important_states_times (this)
             this.start_fixation_time = this.find_state_time('startFixation=>startFixation_waiter');
             this.start_stimulus_time = this.find_state_time('stimulus=>stimulus_waiter');
             this.reward_time = this.find_state_time('releaseWait_waiter=>reward');
         end
 
-        function check_orientation_trial_goodness (this)
-            start_index = Utils.Util.find_all(this.states.info, 'barWait=>barWait_waiter');
-            end_index = Utils.Util.find_all(this.states.info, 'releaseWait_waiter=>reward');
-            this.is_good_trial = (~isempty(start_index) & (~isempty(end_index)));
+        function set_acceptable_states (this, start_of_each_trial)
+            set_acceptable_states@Trials.Trial(this, start_of_each_trial);
+        end
+
+        function check_trial_goodness_by_states (this, start_state, end_state)
+            check_trial_goodness_by_states@Trials.Trial(this, start_state, end_state);
         end
 
         function update_used_indices (this, new_indices)
