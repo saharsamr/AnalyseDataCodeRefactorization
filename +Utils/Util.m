@@ -36,5 +36,13 @@ classdef Util
                 );
             end
          end
+
+         function result = find_all_indices_contain_some_words(container, varargin)
+             result = [];
+             for i = 1:nargin-1
+                 indices = Utils.Util.find_all(container, varargin(i));
+                 result = union(result, indices);
+             end
+         end
     end
 end
