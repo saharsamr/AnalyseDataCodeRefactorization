@@ -155,7 +155,6 @@ classdef Trial < AnalysisData.Data
         function set_reward_value (this)
             reward_index = Utils.Util.find_all(this.states.info, 'reward:');
             reward_index = reward_index(end);
-            disp(reward_index);
             if this.error
                 this.reward_value = -1;
             elseif isempty(reward_index)
