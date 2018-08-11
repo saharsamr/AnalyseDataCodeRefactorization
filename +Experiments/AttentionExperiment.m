@@ -19,6 +19,10 @@ classdef AttentionExperiment < Experiments.Experiment
         end
 
         function extract_experiment_data (this, exp_index)
+            this.extract_experiment_el_data(exp_index);
+        end
+
+        function extract_experiment_el_data (this, exp_index)
             extract_experiment_el_data@Experiments.Experiment(this, exp_index);
         end
 
@@ -38,7 +42,7 @@ classdef AttentionExperiment < Experiments.Experiment
         function set_experiment_properties (this, events_, trials_start_indices)
             set_experiment_properties@Experiments.Experiment( ...
                                                     this, ...
-                                                    events_, ..
+                                                    events_, ...
                                                     trials_start_indices ...
             );
         end

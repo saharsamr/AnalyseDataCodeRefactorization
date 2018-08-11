@@ -26,14 +26,16 @@ classdef Util
           end
 
          function result = substr2double (string, start_delimeter, start_diff_index, end_delimeter, end_diff_index)
-             if nargin < 4
+             if nargin == 3
                  result = str2double(string(strfind(string, start_delimeter)+start_diff_index:end));
-             else
+             elseif nargin == 5
                  result = str2double(string( ...
                                     strfind(string, start_delimeter)+start_diff_index ...
                                     : ...
                                     strfind(string, end_delimeter)-end_diff_index) ...
                 );
+            else
+                result = str2double(string);
             end
          end
 
