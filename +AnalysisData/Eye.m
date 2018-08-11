@@ -1,7 +1,7 @@
 classdef Eye < AnalysisData.Data
     properties (Access = private)
         time = [];
-        pa = []; %TODO: ask to find a better name.
+        pa = [];
         posx = [];
         posy = [];
         errorVal
@@ -18,7 +18,7 @@ classdef Eye < AnalysisData.Data
             this.pa = data_eye.Samples.pa(eye_sample_cut_indices, 2);
             this.posx = data_eye.Samples.posX(eye_sample_cut_indices);
             this.posy = data_eye.Samples.posY(eye_sample_cut_indices);
-            this.errorVal = -32768; % TODO
+            this.errorVal = -32768;
 
             this.pa(this.pa == this.errorVal) = NaN;
             this.posx(this.posx == this.errorVal) = NaN;
@@ -32,7 +32,11 @@ classdef Eye < AnalysisData.Data
             startSaccads = data_eye.Events.Esacc.start - start_time_eyelink;
             for saccad_index = 1:numel(endSaccads)
                 if endSaccads(saccad_index) > state_timings.trigger
-                    cut = find(this.time < endSaccads(saccad_index) & this.time > startSaccads(saccad_index));
+                    cut = find( ...
+                            this.time < endSaccads(saccad_index) ...
+                            & ...
+                            this.time > startSaccads(saccad_index) ...
+                    );
                     if ~isempty(cut)
                         counter = counter + 1;
                         this.saccadeTime{counter} = this.time(cut);
