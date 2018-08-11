@@ -24,8 +24,6 @@ classdef Eye < AnalysisData.Data
             this.posx(this.posx == this.errorVal) = NaN;
             this.posy(this.posy == this.errorVal) = NaN;
             this.saccadeTime = [];
-
-            % TODO: find a way for passing better the data_eye.
         end
 
         function set_saccade_time (this, data_eye, state_timings, start_time_eyelink)

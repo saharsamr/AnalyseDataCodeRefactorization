@@ -12,7 +12,7 @@ classdef Trial < AnalysisData.Data
         spike_times
         is_good_trial
         eye
-        TTW
+        TTWs
         state_timing
         used_indices = []
     end
@@ -143,12 +143,12 @@ classdef Trial < AnalysisData.Data
             this.bar.remakeBarSignal(this.end_time, CONFIG.Config.BAR_SAMPLING_FREQ);
         end
 
-        function TTW_indices = set_TTWs (this) % TODO: no use of TTW class.
+        function TTW_indices = set_TTWs (this)
+            this.TTWs = AnalysisData.TTWs();
             TTW_indices   = Utils.Util.find_all(this.trial_events.info, 'TTW:');
             for TTW_index = TTW_indices
                 TTW_str = this.trial_events.info{TTW_index};
-                this.TTW.(TTW_str(1:strfind(TTW_str,':')-1)) = ...
-                        Utils.Util.substr2double(TTW_str, ':', 2);
+                this.TTWs.add_value(TTW_str);
             end
         end
 

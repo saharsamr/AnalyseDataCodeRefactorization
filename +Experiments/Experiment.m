@@ -96,7 +96,6 @@ classdef Experiment < AnalysisData.Data
             events_.time = events_.time - start_time_eyelink;
             eye_time_samples = data_eye.Samples.time - ...
                                     start_time_eyelink;
-            % TODO: maybe we can put saccade calibration here too.
         end
 
         function set_experiment_properties (this, events_, trials_start_indices)
