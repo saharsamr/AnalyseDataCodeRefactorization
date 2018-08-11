@@ -35,7 +35,7 @@ classdef HartleyExperiment < Experiments.Experiment
         end
 
         function set_experiment_properties (this, events_, trials_start_indices)
-            set_experiment_properties@Experiments.Experiment(this, events, trials_start_indices);
+            set_experiment_properties@Experiments.Experiment(this, events_, trials_start_indices);
         end
 
         function filter_good_trials (this)
