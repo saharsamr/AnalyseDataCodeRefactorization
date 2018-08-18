@@ -8,7 +8,10 @@ classdef Util
         end
 
         function result = do_exist (container, key)
-            result = ~isempty(Utils.Util.find_all(container, key));
+            result = ~isempty(find(cellfun(@(x) ~isempty(x), ...
+                               strfind(container, key) ...
+                           )) ...
+            );
         end
 
         function result = find_last (container, key)
@@ -42,7 +45,10 @@ classdef Util
          function result = find_all_indices_contain_some_words(container, varargin)
              result = [];
              for i = 1:nargin-1
-                 indices = Utils.Util.find_all(container, varargin(i));
+                 indices = find(cellfun(@(x) ~isempty(x), ...
+                                strfind(container, varargin(i)) ...
+                            )) ...
+                 ;
                  result = union(result, indices);
              end
          end
