@@ -1,6 +1,9 @@
 classdef OrientationTrial < Trials.Trial
     properties (Access = public)
         orientation_number
+        spatial_frequency
+        phase
+        contrast
         start_fixation_time
         start_stimulus_time
         reward_time
@@ -74,7 +77,13 @@ classdef OrientationTrial < Trials.Trial
             );
             if(~isempty(stimulus_name_index))
                 stimulus_str = this.trial_events.info{stimulus_name_index};
-                this.orientation_number = Utils.Util.substr2double(stimulus_str, ':', 3, '&', 1);
+                stimulus_str = stimulus_str(strfind(stimulus_str, ':')+3:end-1);
+                stimulus_str = strrep(stimulus_str, '&', ' ');
+                values = str2num(stimulus_str);
+                this.orientation_number = values(1);
+                this.contrast = values(2);
+                this.phase = values(3);
+                this.spatial_frequency = values(4);
             end
             this.update_used_indices(stimulus_name_index);
         end
