@@ -1,4 +1,9 @@
-classdef OrientationExperiment < Experiments.Experiment
+classdef StimulusVariablesExperiment < Experiments.Experiment
+
+    properties (Access = public)
+        stimulus_variable_values
+    end
+
     methods (Access = public)
         function this = OrientationExperiment ( ...
                 postfix, ...
@@ -21,9 +26,17 @@ classdef OrientationExperiment < Experiments.Experiment
         function extract_experiment_data (this, exp_index)
             this.extract_experiment_el_data(exp_index);
             this.extract_experiment_br_data();
-            % this.plot_spikes_during_trials();
-            orientations = find_experiment_orientations (this);
-            Experiments.Plot.raster_plot_and_psth_of_spikes(orientations, this.trials, 'size', -1000, 2000, 10000*[-0.1 -0.05 0 0.02 0.05 0.1 0.15 0.2]);
+            this.set_stimulus_variable_values(Experiments.StimulusVariables.get_type());
+        end
+
+        function set_stimulus_variable_values (this, variable_name)
+            variable_value_index = Utils.Util.find_last(this.Properties.info, ...
+                                                      variable_name ...
+            );
+            variable_value_str = this.Properties.info{variable_value_index};
+            this.stimulus_variable_values = ...
+                eval(variable_value_str(strfind(variable_value_str, ':')+2:end)) ...
+            ;
         end
 
         function extract_experiment_el_data (this, exp_index)
@@ -40,14 +53,6 @@ classdef OrientationExperiment < Experiments.Experiment
     end
 
     methods (Access = protected)
-
-        function orientations = find_experiment_orientations (this)
-            orientations_index = Utils.Util.find_last(this.Properties.info, ...
-                                                      'stimulusSizes' ...
-            );
-            orientations_str = this.Properties.info{orientations_index};
-            orientations = eval(orientations_str(strfind(orientations_str, ':')+2:end));
-        end
 
         function [start_time_eyelink,eye_time_samples] = ...
                     calibrate_times(this, events_, data_eye)

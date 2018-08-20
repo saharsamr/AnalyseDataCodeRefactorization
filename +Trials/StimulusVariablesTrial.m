@@ -1,4 +1,4 @@
-classdef OrientationTrial < Trials.Trial
+classdef StimulusVariablesTrial < Trials.Trial
     properties (Access = public)
         orientation_number
         spatial_frequency
@@ -8,8 +8,6 @@ classdef OrientationTrial < Trials.Trial
         start_fixation_time
         start_stimulus_time
         reward_time
-        % stimulus_number_in_trial
-        % real_stimulus_show_time
     end
 
     methods (Access = public)
@@ -49,7 +47,7 @@ classdef OrientationTrial < Trials.Trial
         function set_states_of_trail (this)
             set_states_of_trail@Trials.Trial(this);
             this.set_acceptable_states('stimulusNumberInTrial: 0');
-            this.set_orientation_number();
+            this.set_stimulus_features();
             this.set_important_states_times();
         end
 
@@ -71,7 +69,7 @@ classdef OrientationTrial < Trials.Trial
     end
 
     methods (Access = protected)
-        function set_orientation_number (this)
+        function set_stimulus_features (this)
             stimulus_name_index = Utils.Util.find_last( ...
                                                       this.trial_events.info, ...
                                                       'stimulusName' ...
