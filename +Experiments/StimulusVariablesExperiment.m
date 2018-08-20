@@ -5,7 +5,7 @@ classdef StimulusVariablesExperiment < Experiments.Experiment
     end
 
     methods (Access = public)
-        function this = OrientationExperiment ( ...
+        function this = StimulusVariablesExperiment ( ...
                 postfix, ...
                 exType, ...
                 exSubject, ...
@@ -26,7 +26,7 @@ classdef StimulusVariablesExperiment < Experiments.Experiment
         function extract_experiment_data (this, exp_index)
             this.extract_experiment_el_data(exp_index);
             this.extract_experiment_br_data();
-            this.set_stimulus_variable_values(Experiments.StimulusVariables.get_type());
+            this.set_stimulus_variable_values(string(Experiments.StimulusVariables.get_type()));
         end
 
         function set_stimulus_variable_values (this, variable_name)
@@ -37,6 +37,7 @@ classdef StimulusVariablesExperiment < Experiments.Experiment
             this.stimulus_variable_values = ...
                 eval(variable_value_str(strfind(variable_value_str, ':')+2:end)) ...
             ;
+            this.stimulus_variable_values
         end
 
         function extract_experiment_el_data (this, exp_index)
