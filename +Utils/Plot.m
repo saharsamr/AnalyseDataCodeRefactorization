@@ -7,7 +7,6 @@ classdef Plot
         set(gca,'xtick',[]);
         set(gca,'ytick',[]);
         box off;
-        hold off;
     end
 
     function set_plot_features (num_of_subplots, horizental_portion, vertical_portion, x_tick, x_label)
