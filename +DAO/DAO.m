@@ -97,8 +97,8 @@ classdef DAO < handle
 
         function [NEV, NS5] = load_blackrock_data (exp_index) %TODO: ask for set a prper name for br data too.
             path = CONFIG.Config.BLACKROCK_DATA_PATH;
-            NEV = openNEV([path 'a11asf2.nev'], 'overwrite');
-            NS5 = openNSx([path 'a11asf2.ns6']);
+            NEV = openNEV([path 'a11asz4.nev'], 'overwrite');
+            NS5 = openNSx([path 'a11asz4.ns6']);
         end
     end
 

@@ -4,6 +4,7 @@ classdef OrientationTrial < Trials.Trial
         spatial_frequency
         phase
         contrast
+        size
         start_fixation_time
         start_stimulus_time
         reward_time
@@ -84,6 +85,7 @@ classdef OrientationTrial < Trials.Trial
                 this.contrast = values(2);
                 this.phase = values(3);
                 this.spatial_frequency = values(4);
+                this.size = values(5);
             end
             this.update_used_indices(stimulus_name_index);
         end

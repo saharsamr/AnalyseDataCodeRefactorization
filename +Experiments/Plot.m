@@ -7,7 +7,7 @@ classdef Plot
             for i = 1:numel(features)
                 selected_trials = trials([trials.(feature_name)] == i);
                 subplot(2*numel(features),1,2*i-1);
-                Experiment.Plot.plot_raster(trials, i, delta_y);
+                Experiments.Plot.plot_raster(selected_trials, i, delta_y);
                 Utils.Plot.set_subplot_figure_design( ...
                                                 x_low_lim, ...
                                                 x_high_lim, ...
@@ -16,12 +16,12 @@ classdef Plot
                                                 features(i) ...
                 );
                 subplot(2*numel(features),1,2*i);
-                Experiment.Plot.plot_psth (trials, x_low_lim, x_high_lim, 10, 1);
+                psth_ = Experiments.Plot.plot_psth (selected_trials, x_low_lim, x_high_lim, 10, 1);
                 Utils.Plot.set_subplot_figure_design( ...
                                                 x_low_lim, ...
                                                 x_high_lim, ...
                                                 0, ...
-                                                max(psth), ...
+                                                max(psth_), ...
                                                 [] ...
                 );
             end
@@ -52,25 +52,25 @@ classdef Plot
             end
         end
 
-        function plot_psth (trials, x_low_lim, x_high_lim, bin_size_ms, x_delta_ms)
+        function psth_ = plot_psth (trials, x_low_lim, x_high_lim, bin_size_ms, x_delta_ms)
             num_of_samples = x_high_lim - x_low_lim + 1;
-            psth = zeros(1, num_of_samples);
+            psth_ = zeros(1, num_of_samples);
             for j = 1:numel(trials)
                 for k = trials(j).spike_times - trials(j).start_stimulus_time
                     if (k > x_low_lim & k < x_high_lim)
-                        psth(floor(k+x_low_lim+1)) = psth(floor(k+x_low_lim+1))+1;
+                        psth_(floor(k-x_low_lim+1)) = psth_(floor(k-x_low_lim+1))+1;
                     end
                 end
             end
             for k = 1:bin_size_ms:num_of_samples
                 low_band = k;
                 high_band = min(k+bin_size_ms-1, num_of_samples);
-                x = sum(psth(low_band:high_band));
+                x = sum(psth_(low_band:high_band));
                 for i = low_band:high_band
-                    psth(i) = x;
+                    psth_(i) = x;
                 end
             end
-            area(x_low_lim:x_high_lim, psth);
+            area(x_low_lim:x_high_lim, psth_);
         end
 
     end
