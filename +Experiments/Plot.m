@@ -62,6 +62,7 @@ classdef Plot
                     end
                 end
             end
+            
             final_psth = zeros(1, num_of_samples);
             for k = 1:x_delta_ms:num_of_samples
                 low_band = max(1, k-bin_size_ms/2);
@@ -69,11 +70,10 @@ classdef Plot
                 x = sum(psth_(low_band:high_band));
                 for i = k:k+x_delta_ms-1
                     final_psth(i) = x;
-                end 
+                end
             end
             a = area(x_low_lim:x_high_lim, final_psth);
             a.FaceColor = [0, 0, 0];
         end
-
     end
 end
