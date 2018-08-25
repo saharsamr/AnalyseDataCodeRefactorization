@@ -43,8 +43,8 @@ classdef Plot
                     j*delta_y* ...
                     ones(1, numel(trials(j).spike_times)) ...
                     , ...
-                    0.2*ones(1, numel(trials(j).spike_times)), ...
-                    'b' ...
+                    0.1*ones(1, numel(trials(j).spike_times)), ...
+                    'k' ...
                 );
                 h.CapSize = 0;
                 h.LineStyle = 'none';
@@ -52,7 +52,7 @@ classdef Plot
             end
         end
 
-        function psth_ = plot_psth (trials, x_low_lim, x_high_lim, bin_size_ms, x_delta_ms)
+        function final_psth = plot_psth (trials, x_low_lim, x_high_lim, bin_size_ms, x_delta_ms)
             num_of_samples = x_high_lim - x_low_lim + 1;
             psth_ = zeros(1, num_of_samples);
             for j = 1:numel(trials)
@@ -62,15 +62,17 @@ classdef Plot
                     end
                 end
             end
-            for k = 1:bin_size_ms:num_of_samples
-                low_band = k;
-                high_band = min(k+bin_size_ms-1, num_of_samples);
+            final_psth = zeros(1, num_of_samples);
+            for k = 1:x_delta_ms:num_of_samples
+                low_band = max(1, k-bin_size_ms/2);
+                high_band = min (num_of_samples, k+bin_size_ms/2-1);
                 x = sum(psth_(low_band:high_band));
-                for i = low_band:high_band
-                    psth_(i) = x;
-                end
+                for i = k:k+x_delta_ms-1
+                    final_psth(i) = x;
+                end 
             end
-            area(x_low_lim:x_high_lim, psth_);
+            a = area(x_low_lim:x_high_lim, final_psth);
+            a.FaceColor = [0, 0, 0];
         end
 
     end
