@@ -2,7 +2,7 @@ classdef Config
     properties (Constant)
         SUBJECT_NAME = 'Chiko'
         TASK_NAME = 'StimulusVariables'
-        STIMULUS_VARIABLE_NAME = 'size'
+        STIMULUS_VARIABLE_NAME = 'orientation'
         RESEARCHER_FIRST_NAME = 'Jafar'
         RESEARCHER_LAST_NAME = ''
         TIME_START = '2018-08-15 08:00:00'
