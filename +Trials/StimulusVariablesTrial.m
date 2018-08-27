@@ -1,6 +1,6 @@
 classdef StimulusVariablesTrial < Trials.Trial
     properties (Access = public)
-        orientation_number
+        orientation
         spatial_frequency
         phase
         contrast
@@ -79,7 +79,7 @@ classdef StimulusVariablesTrial < Trials.Trial
                 stimulus_str = stimulus_str(strfind(stimulus_str, ':')+3:end-1);
                 stimulus_str = strrep(stimulus_str, '&', ' ');
                 values = str2num(stimulus_str);
-                this.orientation_number = values(1);
+                this.orientation = values(1);
                 this.contrast = values(2);
                 this.phase = values(3);
                 this.spatial_frequency = values(4);
