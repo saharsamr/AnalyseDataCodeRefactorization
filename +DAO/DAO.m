@@ -6,7 +6,6 @@ classdef DAO < handle
         researcher_firstname
         researcher_lastname
         bar_sampling_frequency
-        close_fig_flag
         data_folder
         data_list
         time_start
@@ -23,7 +22,6 @@ classdef DAO < handle
                 time_start, ...
                 time_end, ...
                 bar_sampling_frequency, ...
-                close_fig_flag, ...
                 data_folder_pass ...
         )
             this.subject_name = subject_name;
@@ -33,9 +31,11 @@ classdef DAO < handle
             this.time_start = datetime(time_start, 'InputFormat', 'yyyy-MM-dd HH:mm:SS');
             this.time_end = datetime(time_end, 'InputFormat', 'yyyy-MM-dd HH:mm:SS');
             this.bar_sampling_frequency = bar_sampling_frequency;
-            this.close_fig_flag = close_fig_flag;
             this.data_folder = data_folder_pass;
-            this.data_list = dir(fullfile(this.data_folder, '*.edf'));
+            this.data_list = dir(fullfile( ...
+                        this.data_folder, ...
+                        ['*' CONFIG.Config.EYELINK_DATA_POSTFIX '.edf'] ...
+            ));
             this.time_data = datetime(this.data_list(1).name(1:20), 'InputFormat', 'dd-MMM-yyyy-HH-mm-SS');
         end
 
@@ -95,10 +95,10 @@ classdef DAO < handle
             data_eye = Edf2Mat([path '.edf']);
         end
 
-        function [NEV, NS5] = load_blackrock_data (exp_index) %TODO: ask for set a prper name for br data too.
+        function [NEV, NS5] = load_blackrock_data (exp_index)
             path = CONFIG.Config.BLACKROCK_DATA_PATH;
-            NEV = openNEV([path 'a11asz4.nev'], 'overwrite');
-            NS5 = openNSx([path 'a11asz4.ns6']);
+            NEV = openNEV([path CONFIG.Config.BLACKROCK_DATA_POSTFIX '.nev'], 'overwrite');
+            NS5 = openNSx([path CONFIG.Config.BLACKROCK_DATA_POSTFIX '.ns6']);
         end
     end
 
