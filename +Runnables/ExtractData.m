@@ -1,7 +1,4 @@
-addpath('.\..\');
 addpath(genpath('toolbox'));
-import CONFIG.*
-import DAO.*
 
 clear all
 close all
